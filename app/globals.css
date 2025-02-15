@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+#checkbox {
+  accent-color : #751423;
+}
+
+@font-face {
+  font-family: "SharpSans";
+  src: url("/fonts/SharpSans.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "SharpSans";
+  src: url("/fonts/SharpSansBold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+}
+
+/* Repeat for other weights/styles as needed */
+
+
+@layer base {
+  html {
+    font-family: var(--font-open-sans), sans-serif;
+  }
+}
+
+.slide_nav {
+  @apply flex items-center cursor-pointer text-black-200 font-medium;
+}
+
+.small_p {
+  @apply text-xs font-bold text-left;
+}
+.medium_p {
+  @apply text-sm font-bold text-left;
+}
+
+.button_v1 {
+  @apply bg-primary text-white px-6 py-3 rounded-[52px] flex items-center gap-2 outline-none;
+}
+.button_v2 {
+  @apply bg-primary-200 text-white px-6 py-3 rounded-[52px] flex items-center gap-2 outline-none;
+}
+
+.authInput {
+  @apply w-full p-3 border rounded-[12px] bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300;
+}
+
+.authButton {
+  @apply flex items-center gap-2 px-4 py-2 border rounded-[12px] hover:bg-gray-100 text-black-100 outline-none font-bold;
+}
+
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+/* Custom Scrollbar for the dropdown */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f4f4f4;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #c1c1c1;
+  border-radius: 10px;
+  border: 2px solid #f4f4f4;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #a8a8a8;
+}
