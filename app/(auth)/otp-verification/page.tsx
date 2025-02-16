@@ -175,7 +175,7 @@ const Verification = () => {
                   We’ve sent a 6 digit code to your email
                 </p>
                 {/* This is the name of the person that tried signing Up */}
-                <p className="font-bold">mike@example.com</p>
+                <p className="font-bold">{maskEmail("mike@example.com")}</p>
               </div>
             </div>
             <div className="space-y-4">
@@ -217,7 +217,7 @@ const Verification = () => {
               </button>
 
               {/* Resend password timer */}
-              <p className="text-center text-sm mt-4 cursor-pointer">
+              <p onClick={handleResendCode} className="text-center text-sm mt-4 cursor-pointer">
                 Resend OTP in 40 secs
               </p>
             </div>
