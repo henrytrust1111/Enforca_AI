@@ -72,20 +72,31 @@
 
 /* Custom Scrollbar for the dropdown */
 .custom-scrollbar::-webkit-scrollbar {
-  width: 8px;
+  width: 12px;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: #f4f4f4;
+  background: #DEE5FF;
+  /* background: #111D63; */
   border-radius: 10px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #c1c1c1;
+  background-color: #111D63;
+  /* background-color: #DEE5FF; */
   border-radius: 10px;
   border: 2px solid #f4f4f4;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background-color: #a8a8a8;
+  background-color: var(--tw-bg-opacity, 1) var(--tw-bg-primary);
 }

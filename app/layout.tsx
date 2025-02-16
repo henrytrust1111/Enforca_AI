@@ -19,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={sharpsans.variable}>
+    <html lang="en" className={`custom-scrollbar ${sharpsans.variable}`}>
       <body className="w-full max-w-full font-sharpsans">
         <Header />
         <ProgressBarProvider>{children}</ProgressBarProvider>
