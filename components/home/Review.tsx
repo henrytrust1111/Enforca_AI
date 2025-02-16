@@ -47,7 +47,7 @@ const Review: React.FC = () => {
        <Image
         src={ornament1}
         alt="Ornament"
-        className="absolute top-5 right-10 hidden lg:block"
+        className="absolute top-12 right-24 hidden lg:block"
         width={100}
         height={100}
       />
