@@ -90,7 +90,7 @@ const Header: React.FC = () => {
           </a>
 
           {/* My Dashboard */}
-          <a href="" className="text-base font-bold text-[#9AC5FB] pt-8">My Dashboard</a>
+          <a href="/login" className="text-base font-bold text-[#9AC5FB] pt-8">My Dashboard</a>
         </nav>
       </div>
     </header>

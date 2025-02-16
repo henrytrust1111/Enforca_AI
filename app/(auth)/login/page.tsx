@@ -52,6 +52,10 @@ const Login: React.FC = () => {
     }
   };
 
+  function handleClick() {
+    router.push("/"); // Redirect to home page on logo click
+  }
+
   return (
     <div className="grid lg:grid-cols-2 min-h-screen">
       {/* Left Section (Image & Text) */}
@@ -62,7 +66,7 @@ const Login: React.FC = () => {
         <div className="w-full max-w-sm bg-[#F4F8FD] sm:bg-transparent">
           <div className="sm:text-center flex flex-col sm:items-center text-black-100 gap-12 p-6 sm:p-0">
             {/* Logo */}
-            <div className="flex items-center space-x-2 w-max">
+            <div onClick={handleClick} className="flex items-center space-x-2 w-max cursor-pointer">
               <Logo2 width={35} height={35} />
               <span className="text-base md:text-xl mt-2 font-bold">
                 GetreKruitd
