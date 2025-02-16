@@ -40,8 +40,8 @@ export default {
         // 300: "2px 2px 0px 2px rgb(238, 43, 105)"
       },
       backgroundImage: {
-        "hero-desktop": "url('/images/Background.png')",
-        "hero-mobile": "url('/images/Background2.png')",
+        "hero-desktop": "url('/images/Background.webp')",
+        "hero-mobile": "url('/images/Background2.webp')",
         "footer-bg": "url('/images/footer-bg.svg')",
         "footer-texture": "url('/images/footer-texture.svg')"
       },
