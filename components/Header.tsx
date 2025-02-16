@@ -2,13 +2,14 @@
 
 import { Logo } from "./icons/Icons";
 import { HiMenuAlt4 } from "react-icons/hi";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { TfiClose } from "react-icons/tfi";
 import { useEffect, useState } from "react";
 import { LiaArrowRightSolid } from "react-icons/lia";
 
 const Header: React.FC = () => {
   const pathname = usePathname();
+  const router = useRouter()
   const isTransparentBg = pathname === "/" || pathname === "/signup";
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -20,6 +21,10 @@ const Header: React.FC = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  function handleDashboardClick () {
+    router.push("/login")
+  }
 
   return (
     <header
@@ -45,7 +50,7 @@ const Header: React.FC = () => {
 
         {/* My Dashboard (Desktop) */}
         <div className="hidden md:flex justify-end">
-          <a href="#" className="button_v1">My Dashboard</a>
+          <button onClick={handleDashboardClick} className="button_v1">My Dashboard</button>
         </div>
 
         {/* Mobile Menu Icon */}
@@ -85,7 +90,7 @@ const Header: React.FC = () => {
           </a>
 
           {/* My Dashboard */}
-          <a href="#" className="text-base font-bold text-[#9AC5FB] pt-8">My Dashboard</a>
+          <a href="" className="text-base font-bold text-[#9AC5FB] pt-8">My Dashboard</a>
         </nav>
       </div>
     </header>

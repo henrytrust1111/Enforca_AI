@@ -1,19 +1,16 @@
 import React from 'react'
-import { Facebook, Google, Apple } from '../icons/Icons'
+import { Facebook, Google, Linkedin } from '../icons/Icons'
 
 const SocialSignup: React.FC = () => {
   return (
-    <div className="grid lg:grid-cols-3 gap-4">
-    <button className="authButton">
-      <Google width={20} height={20} /> Google
-    </button>
-    <button className="authButton">
-      <Facebook width={20} height={20} /> Facebook
-    </button>
-    <button className="authButton">
-      <Apple width={20} height={20} /> Apple
-    </button>
-  </div>
+    <div className="grid grid-cols-2 gap-8 mt-6">
+      <button className="authButton">
+        <Google width={20} height={20} /> <span className='mt-1'>Google</span>
+      </button>
+      <button className="authButton">
+        <Linkedin width={20} height={20} /> <span className='mt-1'>Linkedin</span>
+      </button>
+    </div>
   )
 }
 

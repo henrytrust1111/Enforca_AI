@@ -53,7 +53,7 @@
 }
 
 .authButton {
-  @apply flex items-center gap-2 px-4 py-2 border rounded-[12px] hover:bg-gray-100 text-black-100 outline-none font-bold;
+  @apply flex items-center justify-center gap-2 py-3 border border-[#DFE2E2] rounded-[8px]  text-[#505959] outline-none font-bold;
 }
 
 

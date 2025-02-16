@@ -19,6 +19,18 @@ export const Logo: React.FC<LogoProps> = ({ width, height }) => {
     );
 }
 
+export const Logo2: React.FC<LogoProps> = ({ width, height }) => {
+    return (
+        <Image
+            src="/icons/logo.svg" // Path relative to the public folder
+            alt="Company Logo"
+            width={width}
+            height={height}
+            priority // Use this prop if the image is critical (e.g., logo)
+        />
+    );
+}
+
 // Facebook icon component
 export const Facebook: React.FC<LogoProps> = ({ width, height }) => {
     return (
@@ -46,10 +58,10 @@ export const Google: React.FC<LogoProps> = ({ width, height }) => {
 }
 
 // Apple icon component
-export const Apple: React.FC<LogoProps> = ({ width, height }) => {
+export const Linkedin: React.FC<LogoProps> = ({ width, height }) => {
     return (
         <Image
-            src="/icons/apple.svg" // Path relative to the public folder
+            src="/icons/linkedin.svg" // Path relative to the public folder
             alt="Apple Icon"
             width={width}
             height={height}

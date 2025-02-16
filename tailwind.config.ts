@@ -21,6 +21,10 @@ export default {
           "300": "#6B7280",
           DEFAULT: "#000000"
         },
+        gray: {
+          "500": "#6B7280",
+          // DEFAULT: "#000000"
+        },
         white: {
           "100": "#F7F7F7",
           DEFAULT: "#FFFFFF"
