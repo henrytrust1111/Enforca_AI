@@ -1,5 +1,5 @@
 import React from 'react'
-import { Facebook, Google, Linkedin } from '../icons/Icons'
+import { Google, Linkedin } from '../icons/Icons'
 
 const SocialSignup: React.FC = () => {
   return (
