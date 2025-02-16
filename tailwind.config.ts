@@ -12,6 +12,7 @@ export default {
         primary: {
           "100": "#111D63",
           "200": "#9CB3D7",
+          "300": "#7EC473",
           DEFAULT: "#111D63",
         },
         secondary: "#FBE843",

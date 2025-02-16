@@ -82,3 +82,29 @@ export const Checked: React.FC<LogoProps> = ({ width, height }) => {
         />
     );
 }
+
+// Checked icon component
+export const Valid: React.FC<LogoProps> = ({ width, height }) => {
+    return (
+        <Image
+            src="/icons/valid.svg" // Path relative to the public folder
+            alt="Apple Icon"
+            width={width}
+            height={height}
+            priority // Use this prop if the image is critical (e.g., logo)
+        />
+    );
+}
+
+// Checked icon component
+export const Padlock: React.FC<LogoProps> = ({ width, height }) => {
+    return (
+        <Image
+            src="/images/Padlock.png" // Path relative to the public folder
+            alt="Apple Icon"
+            width={width}
+            height={height}
+            priority // Use this prop if the image is critical (e.g., logo)
+        />
+    );
+}
