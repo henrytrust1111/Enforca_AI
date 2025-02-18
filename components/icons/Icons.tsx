@@ -94,14 +94,69 @@ export const Valid: React.FC<LogoProps> = ({ width, height }) => {
             priority // Use this prop if the image is critical (e.g., logo)
         />
     );
+
+}
+
+
+// Phone icon component
+export const Phone: React.FC<LogoProps> = ({ width, height }) => {
+    return (
+        <Image
+            src="/icons/phone.svg" // Path relative to the public folder
+            alt="Apple Icon"
+            width={width}
+            height={height}
+            priority // Use this prop if the image is critical (e.g., logo)
+        />
+    );
+}
+
+// Envelop icon component
+export const Envelope: React.FC<LogoProps> = ({ width, height }) => {
+    return (
+        <Image
+            src="/icons/envelope.svg" // Path relative to the public folder
+            alt="Apple Icon"
+            width={width}
+            height={height}
+            priority // Use this prop if the image is critical (e.g., logo)
+        />
+    );
 }
 
 // Checked icon component
 export const Padlock: React.FC<LogoProps> = ({ width, height }) => {
     return (
         <Image
-            src="/images/Padlock.png" // Path relative to the public folder
+            src="/images/Padlock.gif" // Path relative to the public folder
             alt="Apple Icon"
+            width={width}
+            height={height}
+            priority // Use this prop if the image is critical (e.g., logo)
+        />
+    );
+}
+
+// Done gif icon component
+export const Done: React.FC<LogoProps> = ({ width, height }) => {
+    return (
+        <Image
+            src="/images/done.gif" // Path relative to the public folder
+            alt="Apple Icon"
+            width={width}
+            height={height}
+            priority // Use this prop if the image is critical (e.g., logo)
+        />
+    );
+}
+
+
+// Success gif icon component
+export const SuccessIcon: React.FC<LogoProps> = ({ width, height }) => {
+    return (
+        <Image
+            src="/icons/success.gif" // Path relative to the public folder
+            alt="success"
             width={width}
             height={height}
             priority // Use this prop if the image is critical (e.g., logo)

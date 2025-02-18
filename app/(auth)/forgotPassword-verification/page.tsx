@@ -1,26 +1,37 @@
-import React from 'react'
+"use client";
 
-const ForgotPassVerification = () => {
+import AuthLeft2 from "@/components/auth/AuthLeft2";
+import ForgetPasswordRightLayout from "@/components/auth/layout/ForgetPasswordRightLayout";
+import OtpInputSection from "@/components/auth/OtpInputSection";
+
+const maskEmail = (email: string) => {
+  const [name, domain] = email.split("@");
+  const maskedName = name.slice(0, 5) + "*****";
+  return `${maskedName}@${domain}`;
+};
+const Page = () => {
   return (
-    <div>
-      Forgot
+    <div className="grid lg:grid-cols-2 min-h-screen">
+      {/* Left Column */}
+      <AuthLeft2 href="/forgot-password" />
+
+      {/* Right Column */}
+      <ForgetPasswordRightLayout>
+        <div className="font-medium mb-6 sm:mb-6">
+          <p className="font-medium">We’ve sent a 6 digit code to your email</p>
+          {/* This is the name of the person that tried signing Up */}
+          <p className="font-bold">{maskEmail("mike@example.com")}</p>
+        </div>
+
+        <div className="w-full space-y-16 sm:space-y-6 mt-4 sm:mt-12">
+          <OtpInputSection />
+        </div>
+      </ForgetPasswordRightLayout>
     </div>
-  )
-}
+  );
+};
 
-export default ForgotPassVerification
-
-
-
-
-
-
-
-
-
-
-
-
+export default Page;
 
 // "use client";
 

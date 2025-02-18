@@ -1,271 +1,421 @@
-import React from 'react'
+"use client";
 
-const ResetPass = () => {
+import AuthLeft2 from "@/components/auth/AuthLeft2";
+import ForgetPasswordRightLayout from "@/components/auth/layout/ForgetPasswordRightLayout";
+import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
+import "react-phone-input-2/lib/style.css";
+import { useRouter } from "next-nprogress-bar";
+import { toast, ToastContainer } from "react-toastify";
+import { BiLoaderCircle, BiLockAlt } from "react-icons/bi";
+import axiosInstance from "@/lib/axiosInstance";
+import { CheckCircle, XCircle } from "lucide-react";
+import CustomInput from "@/components/auth/CustomInput";
+import SuccessModal from "@/components/modals/SuccessModal";
+
+const ResetPassword = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [touched, setTouched] = useState(false);
+  const [formData, setFormData] = useState({
+    password: "",
+    confirmPassword: ""
+  });
+
+  const [errors, setErrors] = useState({
+    password: "",
+    confirmPassword: ""
+  });
+
+  const router = useRouter();
+
+  // Validate input fields
+  const validateInput = (name: string, value: string) => {
+    let errorMessage = "";
+
+    if (name === "password") {
+      if (!/.{8,}/.test(value)) {
+        errorMessage = "Password must be at least 8 characters long";
+      }
+    }
+
+    if (name === "confirmPassword") {
+      if (value !== formData.password) {
+        errorMessage = "Passwords do not match";
+      }
+    }
+
+    setErrors((prev) => ({ ...prev, [name]: errorMessage }));
+  };
+
+  // Password validation checks
+  const requirements = [
+    { label: "At least 8 characters", regex: /.{8,}/ },
+    { label: "At least one uppercase letter", regex: /[A-Z]/ },
+    { label: "At least one lowercase letter", regex: /[a-z]/ },
+    { label: "At least one number", regex: /[0-9]/ },
+    { label: "At least one special character (!@#$%^&*)", regex: /[!@#$%^&*]/ }
+  ];
+
+  // Handle input change
+  const handleChange = (name: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    validateInput(name, value);
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      const response = await axiosInstance.post("/reset-password", formData);
+      toast.success(response.data.message || "Password reset successful!");
+
+      // Redirect to login page
+      router.push("/login");
+    } catch (error: any) {
+      toast.error(
+        error.response?.data?.message ||
+          "Password reset failed. Please try again."
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const validatePassword = (password: string) => {
+    const errors = requirements.map((req) => ({
+      label: req.label,
+      isValid: req.regex.test(password)
+    }));
+
+    return errors.every((error) => error.isValid);
+  };
+
+  const isFormValid =
+    formData.password &&
+    formData.confirmPassword &&
+    validatePassword(formData.password) &&
+    formData.password === formData.confirmPassword &&
+    Object.values(errors).every((err) => err === "");
+
   return (
-    <div>
-      Reset
-    </div>
-  )
-}
+    <>
+      <div className="grid lg:grid-cols-2 min-h-screen relative">
+        {/* Left Column */}
+        <AuthLeft2 href="/forgotPassword-verification" />
 
-export default ResetPass
+        {/* Right Column */}
+        <ForgetPasswordRightLayout>
+          <p className="font-bold mb-6 sm:mb-6">Reset your Password</p>
 
+          <form onSubmit={handleSubmit} className="space-y-4 w-full">
+            <div className="space-y-6">
+              {/* Enter New Password */}
+              <div className="w-full mt-4 relative">
+                <CustomInput
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter New Password"
+                  value={formData.password}
+                  onChange={(e: any) =>
+                    handleChange("password", e.target.value)
+                  }
+                  icon={<BiLockAlt size={20} />}
+                  className="pl-10"
+                />
+                <button
+                  type="button"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
 
+              {/* Password Requirements */}
+              {(touched || formData.password) && (
+                <ul className="mt-2 text-sm">
+                  {requirements.map((req, index) => {
+                    const isValid = req.regex.test(formData.password);
+                    return (
+                      <li
+                        key={index}
+                        className={`flex text-xs items-center gap-2 ${
+                          isValid ? "text-green-600" : "text-gray-500"
+                        }`}
+                      >
+                        {isValid ? (
+                          <CheckCircle size={14} />
+                        ) : (
+                          <XCircle size={14} />
+                        )}{" "}
+                        {req.label}
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
 
+              {/* Confirm New Password */}
+              <div className="w-full mt-4 relative">
+                <CustomInput
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Confirm Password"
+                  value={formData.confirmPassword}
+                  onChange={(e: any) =>
+                    handleChange("confirmPassword", e.target.value)
+                  }
+                  icon={<BiLockAlt size={20} />}
+                  className="pl-10"
+                />
+                <button
+                  type="button"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
+            </div>
 
+            {/* Reset Password button */}
+            <button
+              id="submit"
+              type="submit"
+              className={`button_v1 mb-4 w-full flex justify-center items-center ${
+                !isFormValid ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+              disabled={!isFormValid || isLoading}
+              aria-disabled={!isFormValid || isLoading}
+            >
+              {isLoading ? (
+                <BiLoaderCircle
+                  className="animate-spin h-6 w-6"
+                  aria-hidden="true"
+                />
+              ) : (
+                "Reset Password"
+              )}
+            </button>
+          </form>
+        </ForgetPasswordRightLayout>
+        <SuccessModal />
+      </div>
+      <ToastContainer />
+    </>
+  );
+};
 
-
-
-
-
-
-
-
-
+export default ResetPassword;
 
 // "use client";
 
-// import React, { useState } from "react";
-// import Image from "next/image";
-// import { FiLock } from "react-icons/fi";
-// import { BiLoaderCircle } from "react-icons/bi";
-// import { useRouter } from "next/navigation";
-// import logo from "@/public/icons/logo.svg";
-// import axiosInstance from "@/lib/axiosInstance";
+// import AuthLeft2 from "@/components/auth/AuthLeft2";
+// import ForgetPasswordRightLayout from "@/components/auth/layout/ForgetPasswordRightLayout";
+// import { useState } from "react";
+// import { Eye, EyeOff } from "lucide-react";
+// import "react-phone-input-2/lib/style.css";
+// import { useRouter } from "next-nprogress-bar";
 // import { toast, ToastContainer } from "react-toastify";
-// import { AiOutlineMail } from "react-icons/ai";
-// import axios from "axios";
+// import { BiLoaderCircle, BiLockAlt } from "react-icons/bi";
+// import axiosInstance from "@/lib/axiosInstance";
+// import { CheckCircle, XCircle } from "lucide-react";
+// // import Cookies from "js-cookie";
+// import CustomInput from "@/components/auth/CustomInput";
 
-// interface FormData {
-//   email: string;
-//   password: string;
-//   confirmPassword: string;
-// }
+// const ResetPassword = () => {
+//   const [showPassword, setShowPassword] = useState(false);
+//   const [isLoading, setIsLoading] = useState(false);
+//   const [touched, setTouched] = useState(false);
+//   const [formData, setFormData] = useState({
+//     firstName: "",
+//     lastName: "",
+//     email: "",
+//     phoneNumber: "",
+//     password: ""
+//   });
 
-// const Reset = () => {
+//   const [errors, setErrors] = useState({
+//     firstName: "",
+//     lastName: "",
+//     email: "",
+//     password: ""
+//   });
+
 //   const router = useRouter();
-//   const [loading, setLoading] = useState(false);
-//   const [showPassword, setShowPassword] = useState({
-//     password: false,
-//     confirmPassword: false,
-//   });
-//   const [formData, setFormData] = useState<FormData>({
-//     email:  "",
-//     password: "",
-//     confirmPassword: "",
-//   });
+
+//   // Validate input fields
+//   const validateInput = (name: string, value: string) => {
+//     let errorMessage = "";
+
+//     if (name === "firstName" || name === "lastName") {
+//       if (!/^[A-Za-z]+$/.test(value)) {
+//         errorMessage = "Only letters are allowed";
+//       }
+//     }
+
+//     if (name === "email") {
+//       if (!/^\S+@\S+\.\S+$/.test(value)) {
+//         errorMessage = "Enter a valid email address";
+//       }
+//     }
+
+//     setErrors((prev) => ({ ...prev, [name]: errorMessage }));
+//   };
+
+//   // Password validation checks
+//   const requirements = [
+//     { label: "At least 8 characters", regex: /.{8,}/ },
+//     { label: "At least one uppercase letter", regex: /[A-Z]/ },
+//     { label: "At least one lowercase letter", regex: /[a-z]/ },
+//     { label: "At least one number", regex: /[0-9]/ },
+//     { label: "At least one special character (!@#$%^&*)", regex: /[!@#$%^&*]/ }
+//   ];
+
+//   // Handle input change
+//   const handleChange = (name: string, value: string) => {
+//     setFormData((prev) => ({ ...prev, [name]: value }));
+//     validateInput(name, value);
+//   };
+
+//   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+//     e.preventDefault();
+//     setIsLoading(true);
+
+//     try {
+//       const response = await axiosInstance.post("/signup", formData);
+//       toast.success(response.data.message || "Signup successful!");
+
+//       // Cookies.set("email", formData.email, { expires: 1, path: "/" }); // expire in one day
+
+//       // Redirect to OTP verification page
+//       router.push("/otp-verification");
+//     } catch (error: any) {
+//       toast.error(
+//         error.response?.data?.message || "Signup failed. Please try again."
+//       );
+//     } finally {
+//       setIsLoading(false);
+//     }
+//   };
 
 //   const validatePassword = (password: string) => {
-//     const minLength = 8;
-//     const hasUpperCase = /[A-Z]/.test(password);
-//     const hasLowerCase = /[a-z]/.test(password);
-//     const hasNumber = /\d/.test(password);
-//     const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-
-//     if (password.length < minLength) {
-//       return "Password must be at least 8 characters long";
-//     }
-//     if (!hasUpperCase) {
-//       return "Password must contain at least one uppercase letter";
-//     }
-//     if (!hasLowerCase) {
-//       return "Password must contain at least one lowercase letter";
-//     }
-//     if (!hasNumber) {
-//       return "Password must contain at least one number";
-//     }
-//     if (!hasSpecialChar) {
-//       return "Password must contain at least one special character";
-//     }
-//     return null;
-//   };
-
-//   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     const { name, value } = e.target;
-//     setFormData(prev => ({
-//       ...prev,
-//       [name]: value
+//     const errors = requirements.map((req) => ({
+//       label: req.label,
+//       isValid: req.regex.test(password)
 //     }));
+
+//     return errors.every((error) => error.isValid);
 //   };
 
-//   const togglePasswordVisibility = (field: 'password' | 'confirmPassword') => {
-//     setShowPassword(prev => ({
-//       ...prev,
-//       [field]: !prev[field]
-//     }));
-//   };
-
-//   const handleSubmit = async (e: React.FormEvent) => {
-//     e.preventDefault();
-
-//     // Validate email presence
-//     if (!formData.email) {
-//       toast.error("Email is required");
-//       return;
-//     }
-
-//     // Validate passwords match
-//     if (formData.password !== formData.confirmPassword) {
-//       toast.error("Passwords do not match");
-//       return;
-//     }
-
-//     // Validate password strength
-//     const passwordError = validatePassword(formData.password);
-//     if (passwordError) {
-//       toast.error(passwordError);
-//       return;
-//     }
-
-//     setLoading(true);
-//     try {
-//       const response = await axiosInstance.post("/reset-password", {
-//         email: formData.email,
-//         password: formData.password,
-//         confirmPassword: formData.confirmPassword
-//       });
-
-//       toast.success(response.data.message || "Password reset successful");
-//       router.push("/");
-//     } catch (error) {
-//       if (axios.isAxiosError(error)) {
-//         toast.error(
-//           error.response?.data?.message || 
-//           "Failed to reset password. Please try again."
-//         );
-//       } else {
-//         toast.error("An unexpected error occurred");
-//       }
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
+//   const isFormValid =
+//     formData.firstName &&
+//     formData.lastName &&
+//     formData.email &&
+//     formData.phoneNumber &&
+//     formData.password &&
+//     validatePassword(formData.password) &&
+//     Object.values(errors).every((err) => err === "");
 
 //   return (
-//     <div className="flex flex-col items-center justify-center min-h-screen bg-white px-4">
-//       <div className="mb-8">
-//         <Image src={logo} alt="logo" width={60} height={60} priority />
-//       </div>
+//     <div className="grid lg:grid-cols-2 min-h-screen">
+//       {/* Left Column */}
+//       <AuthLeft2 href="/forgot-password" />
 
-//       <div className="w-full max-w-md bg-white rounded-lg py-6">
-//         <h2 className="text-2xl font-semibold text-center text-gray-800 mb-4">
-//           Reset Password
-//         </h2>
-//         <p className="text-center text-gray-600 mb-6">
-//           Enter your new password below
+//       {/* Right Column */}
+//       <ForgetPasswordRightLayout>
+//         <p className="font-bold mb-6 sm:mb-6">
+//          Reset your Password
 //         </p>
 
 //         <form onSubmit={handleSubmit} className="space-y-4">
-//           <div>
-//         <label
-//             htmlFor="email"
-//             className="block text-sm font-medium text-gray-600 mb-2"
-//           >
-//             Enter Email Address
-//           </label>
-//           <div className="relative">
-//             {/* Email Input */}
-//             <input
-//               type="email"
-//               id="email"
-//               name="email"
-//               value={formData.email}
-//               onChange={handleInputChange}
-//               placeholder="Enter your email"
-//               className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none disabled:bg-gray-100 disabled:cursor-not-allowed"
-//               disabled={loading}
-//               required
-//             />
-//             {/* Icon */}
-//             <AiOutlineMail
-//               size={20}
-//               className="absolute right-3 top-3 text-gray-500"
-//             />
-//           </div>
-//         </div>
-//           <div>
-//             <label
-//               htmlFor="password"
-//               className="block text-sm font-medium text-gray-700"
-//             >
-//               New Password
-//             </label>
-//             <div className="relative mt-1">
-//               <FiLock className="absolute inset-y-0 top-2 left-3 text-gray-400" />
-//               <input
-//                 type={showPassword.password ? "text" : "password"}
-//                 id="password"
-//                 name="password"
-//                 value={formData.password}
-//                 onChange={handleInputChange}
-//                 className="block w-full pl-10 pr-12 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary sm:text-sm disabled:bg-gray-100"
+//           <div className="space-y-6">
+//             {/* Enter New Password */}
+//             <div className="w-full mt-4 relative">
+//               <CustomInput
+//                 type={showPassword ? "text" : "password"}
 //                 placeholder="Enter New Password"
-//                 disabled={loading}
-//                 required
+//                 value={formData.password}
+//                 onChange={(e: any) => handleChange("password", e.target.value)}
+//                 icon={<BiLockAlt size={20} />}
+//                 className="pl-10"
 //               />
 //               <button
 //                 type="button"
-//                 onClick={() => togglePasswordVisibility('password')}
-//                 className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-500"
+//                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+//                 onClick={() => setShowPassword(!showPassword)}
 //               >
-//                 {showPassword.password ? "Hide" : "Show"}
+//                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+//               </button>
+//             </div>
+
+//             {/* Password Requirements */}
+//             {(touched || formData.password) && (
+//               <ul className="mt-2 text-sm">
+//                 {requirements.map((req, index) => {
+//                   const isValid = req.regex.test(formData.password);
+//                   return (
+//                     <li
+//                       key={index}
+//                       className={`flex text-xs items-center gap-2 ${
+//                         isValid ? "text-green-600" : "text-gray-500"
+//                       }`}
+//                     >
+//                       {isValid ? (
+//                         <CheckCircle size={14} />
+//                       ) : (
+//                         <XCircle size={14} />
+//                       )}{" "}
+//                       {req.label}
+//                     </li>
+//                   );
+//                 })}
+//               </ul>
+//             )}
+
+//                {/* Confirm New Password */}
+//                <div className="w-full mt-4 relative">
+//               <CustomInput
+//                 type={showPassword ? "text" : "password"}
+//                 placeholder="Confirm Password"
+//                 value={formData.password}
+//                 onChange={(e: any) => handleChange("password", e.target.value)}
+//                 icon={<BiLockAlt size={20} />}
+//                 className="pl-10"
+//               />
+//               <button
+//                 type="button"
+//                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+//                 onClick={() => setShowPassword(!showPassword)}
+//               >
+//                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
 //               </button>
 //             </div>
 //           </div>
 
-//           <div>
-//             <label
-//               htmlFor="confirmPassword"
-//               className="block text-sm font-medium text-gray-700"
-//             >
-//               Confirm Password
-//             </label>
-//             <div className="relative mt-1">
-//               <FiLock className="absolute inset-y-0 top-2 left-3 text-gray-400" />
-//               <input
-//                 type={showPassword.confirmPassword ? "text" : "password"}
-//                 id="confirmPassword"
-//                 name="confirmPassword"
-//                 value={formData.confirmPassword}
-//                 onChange={handleInputChange}
-//                 className="block w-full pl-10 pr-12 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary sm:text-sm disabled:bg-gray-100"
-//                 placeholder="Confirm New Password"
-//                 disabled={loading}
-//                 required
-//               />
-//               <button
-//                 type="button"
-//                 onClick={() => togglePasswordVisibility('confirmPassword')}
-//                 className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-500"
-//               >
-//                 {showPassword.confirmPassword ? "Hide" : "Show"}
-//               </button>
-//             </div>
-//           </div>
-
+//           {/* Create account button */}
 //           <button
+//             id="submit"
 //             type="submit"
-//             disabled={loading}
-//             className="w-full py-2 px-4 bg-primary hover:bg-green-600 text-white font-semibold rounded-[8px] shadow focus:ring-2 focus:ring-green-400 focus:ring-offset-2 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+//             className={`button_v1 mb-4 w-full flex justify-center items-center ${
+//               !isFormValid ? "opacity-50 cursor-not-allowed" : ""
+//             }`}
+//             disabled={!isFormValid || isLoading}
+//             aria-disabled={!isFormValid || isLoading}
 //           >
-//             {loading ? (
-//               <>
-//                 <BiLoaderCircle className="animate-spin mr-2" />
-//                 Resetting Password...
-//               </>
+//             {isLoading ? (
+//               <BiLoaderCircle
+//                 className="animate-spin h-6 w-6"
+//                 aria-hidden="true"
+//               />
 //             ) : (
 //               "Reset Password"
 //             )}
 //           </button>
 //         </form>
-//       </div>
-//       <ToastContainer />
+//       </ForgetPasswordRightLayout>
 //     </div>
 //   );
 // };
 
-// export default Reset;
-
-
-
-
+// export default ResetPassword;
