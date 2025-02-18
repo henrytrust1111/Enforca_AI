@@ -16,7 +16,6 @@ import SuccessModal from "@/components/modals/SuccessModal";
 const ResetPassword = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [touched, setTouched] = useState(false);
   const [formData, setFormData] = useState({
     password: "",
     confirmPassword: ""
@@ -133,7 +132,7 @@ const ResetPassword = () => {
               </div>
 
               {/* Password Requirements */}
-              {(touched || formData.password) && (
+              {(formData.password) && (
                 <ul className="mt-2 text-sm">
                   {requirements.map((req, index) => {
                     const isValid = req.regex.test(formData.password);

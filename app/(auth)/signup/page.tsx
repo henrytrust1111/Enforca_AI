@@ -19,7 +19,6 @@ import CustomInput from "@/components/auth/CustomInput";
 const Signup: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [touched, setTouched] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -227,7 +226,7 @@ const Signup: React.FC = () => {
                 </div>
 
                 {/* Password Requirements */}
-                {(touched || formData.password) && (
+                {(formData.password) && (
                   <ul className="mt-2 text-sm">
                     {requirements.map((req, index) => {
                       const isValid = req.regex.test(formData.password);

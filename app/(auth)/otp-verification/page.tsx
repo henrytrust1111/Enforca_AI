@@ -1,7 +1,7 @@
 "use client";
 
 import AuthLeft from "@/components/auth/AuthLeft";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next-nprogress-bar";
 import { Logo2 } from "@/components/icons/Icons";
 import OtpInputSection from "@/components/auth/OtpInputSection";
@@ -16,6 +16,7 @@ const maskEmail = (email: string) => {
 const Verification = () => {
   const router = useRouter();
   const [myEmail, setMyEmail] = useState<string | null>(null);
+console.log(myEmail);
 
 
   useEffect(() => {

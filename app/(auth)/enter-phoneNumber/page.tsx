@@ -5,7 +5,7 @@ import ForgetPasswordRightLayout from "@/components/auth/layout/ForgetPasswordRi
 import PhoneNumberInput from "@/components/auth/PhoneNumberInput";
 import React, { useState } from "react";
 
-const page = () => {
+const EnterPhoneNumber = () => {
   const [formData, setFormData] = useState({
     phoneNumber: ""
   });
@@ -41,4 +41,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default EnterPhoneNumber;

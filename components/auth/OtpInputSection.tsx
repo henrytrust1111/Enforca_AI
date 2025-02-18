@@ -15,12 +15,6 @@ const otpSchema = z
   .array(z.string().length(1, "Each digit must be 1 character"))
   .length(6, "OTP must be exactly 6 digits");
 
-const maskEmail = (email: string) => {
-  const [name, domain] = email.split("@");
-  const maskedName = name.slice(0, 5) + "*****";
-  return `${maskedName}@${domain}`;
-};
-
 const OtpInputSection = () => {
   const router = useRouter();
   const [otp, setOtp] = useState<string[]>(["", "", "", "", "", ""]);
@@ -133,10 +127,7 @@ const OtpInputSection = () => {
     }
   };
 
-  // handle logo click
-  function handleClick() {
-    router.push("/"); // Redirect to home page on logo click
-  }
+
 
   return (
     <>
