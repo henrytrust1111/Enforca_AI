@@ -46,8 +46,13 @@
 .button_v1 {
   @apply bg-primary text-white px-6 py-3 rounded-[52px] flex items-center gap-2 outline-none;
 }
+
 .button_v2 {
   @apply bg-primary-200 text-white px-6 py-3 rounded-[52px] flex items-center gap-2 outline-none;
+}
+
+.button_v3 {
+  @apply bg-[#F2F7FF] text-[#1F303F] px-6 py-3 rounded-[52px] flex w-full items-center justify-center gap-2 outline-none;
 }
 
 .authInput {
@@ -80,9 +85,10 @@
   display: none;
 }
 
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+
+/* Custom Scrollbar for the dropdown */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 12px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
@@ -100,4 +106,27 @@
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background-color: var(--tw-bg-opacity, 1) var(--tw-bg-primary);
+}
+
+/* Custom Scrollbar for the dropdown */
+.custom-scrollbar2::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar2::-webkit-scrollbar-track {
+  background: transparent;
+  /* background: #dee5ff; */
+  border-radius: 10px;
+}
+
+.custom-scrollbar2::-webkit-scrollbar-thumb {
+  background-color: #36A1C5;
+  /* background-color: #DEE5FF; */
+  border-radius: 10px;
+  border: 2px solid #f4f4f4;
+}
+
+.custom-scrollbar2::-webkit-scrollbar-thumb:hover {
+  background-color: var(--tw-bg-opacity, 1) var(--tw-bg-primary);
+  /* background-color: transparent; */
 }

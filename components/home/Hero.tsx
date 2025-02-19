@@ -1,5 +1,11 @@
+"use client"
+
+import { useRouter } from "next-nprogress-bar";
+
+
 
 const Hero = () => {
+    const router = useRouter()
     return (
         <section className="relative h-[1008px] md:h-[798px] text-white bg-hero-mobile md:bg-hero-desktop bg-cover bg-center font-sharpsans"
         >
@@ -14,7 +20,7 @@ const Hero = () => {
                         guidance aided with our AI-powered job processing platform.
                     </p>
                     <div className="flex flex-wrap gap-4  items-center justify-center">
-                        <button className="button_v1">
+                        <button onClick={()=>router.push("/need-assessment")} className="button_v1">
                             <span>Start your Job Search</span>
                         </button>
                         <button className="button_v2">

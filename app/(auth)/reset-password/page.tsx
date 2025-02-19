@@ -198,7 +198,7 @@ const ResetPassword = () => {
             </button>
           </form>
         </ForgetPasswordRightLayout>
-        <SuccessModal />
+        {/* <SuccessModal /> */}
       </div>
       <ToastContainer />
     </>
