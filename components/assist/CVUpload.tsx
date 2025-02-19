@@ -15,7 +15,7 @@ const CVUpload = () => {
   const [file, setFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
-  const [imageSrc, setImageSrc] = useState<string | null>(null); // To store the image source if taken from camera
+  const [imageSrc, setImageSrc] = useState<string | null>(null); // To store the image source if taken from cameras
 
   console.log(imageSrc);
 
