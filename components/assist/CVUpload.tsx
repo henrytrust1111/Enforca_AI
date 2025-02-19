@@ -107,13 +107,31 @@ if (
               <FaTimes className="w-5 h-5 text-gray-600" />
             </button>
             {/* Display the uploaded PDF */}
-            <iframe
+            {/* <iframe
               src={URL.createObjectURL(file)}
               width="100%"
               height="500px"
               title="Uploaded PDF"
               className="border rounded-lg"
             />
+            <p className="text-sm text-gray-500 mt-2">Uploaded successfully!</p> */}
+            <div className="flex flex-col items-center">
+              <embed
+                src={URL.createObjectURL(file)}
+                type="application/pdf"
+                width="100%"
+                height="500px"
+                className="border rounded-lg mb-4"
+              />
+              <a
+                href={URL.createObjectURL(file)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#111D63] underline text-sm hover:text-[#0e184f]"
+              >
+                Open PDF in new tab
+              </a>
+            </div>
             <p className="text-sm text-gray-500 mt-2">Uploaded successfully!</p>
           </div>
         ) : (
