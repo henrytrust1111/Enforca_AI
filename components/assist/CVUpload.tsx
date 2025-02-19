@@ -1,5 +1,4 @@
-
-"use client"
+"use client";
 import React, { useState, useEffect } from "react";
 import { Dropbox, GoogleDrive } from "../icons/Icons";
 import { FaCloudUploadAlt, FaTimes } from "react-icons/fa"; // Import FaTimes for the close icon
@@ -9,24 +8,24 @@ const CVUpload = () => {
   const [isDragging, setIsDragging] = useState(false);
 
   const handleFileChange = (e: any) => {
-  //   const selectedFile = e.target.files[0];
-  //   if (selectedFile && selectedFile.type === "application/pdf") {
-  //     setFile(selectedFile);
-  //   } else {
-  //     alert("Only PDF files are supported.");
-  //   }
+    //   const selectedFile = e.target.files[0];
+    //   if (selectedFile && selectedFile.type === "application/pdf") {
+    //     setFile(selectedFile);
+    //   } else {
+    //     alert("Only PDF files are supported.");
+    //   }
 
-  const selectedFile = e.target.files[0];
-if (
-  selectedFile &&
-  (selectedFile.type === "application/pdf" || 
-   selectedFile.name.toLowerCase().endsWith(".pdf"))
-) {
-  setFile(selectedFile);
-} else {
-  alert("Only PDF files are supported.");
-}
-  }
+    const selectedFile = e.target.files[0];
+    if (
+      selectedFile &&
+      (selectedFile.type === "application/pdf" ||
+        selectedFile.name.toLowerCase().endsWith(".pdf"))
+    ) {
+      setFile(selectedFile);
+    } else {
+      alert("Only PDF files are supported.");
+    }
+  };
 
   const handleDrop = (e: any) => {
     e.preventDefault();
@@ -61,7 +60,7 @@ if (
   };
 
   useEffect(() => {
-    const handlePaste = (e :any) => {
+    const handlePaste = (e: any) => {
       const items = e.clipboardData.items;
       for (let i = 0; i < items.length; i++) {
         if (items[i].type === "application/pdf") {
@@ -79,7 +78,7 @@ if (
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center p-4 space-y-6">
+    <div className="flex flex-col items-center justify-center py-4 space-y-6">
       {/* Phase 1: Drag and Drop Box */}
       <div
         className={`relative w-full max-w-md p-8 border-2 border-dashed rounded-lg flex flex-col items-center justify-center space-y-4 ${
@@ -146,13 +145,15 @@ if (
                 browse
               </label>
             </p>
-            <p className="text-sm text-gray-500">Only PDF files are supported</p>
+            <p className="text-sm text-gray-500">
+              Only PDF files are supported
+            </p>
           </>
         )}
       </div>
 
       {/* Phase 2: Additional Options */}
-      <div className="flex flex-col items-center space-y-4">
+      <div className="flex flex-col items-center space-y-4 w-full">
         <p className="text-gray-700">or copy and paste instead</p>
         <div className="flex space-x-4">
           <button
@@ -168,13 +169,10 @@ if (
             <Dropbox width={30} height={30} />
           </button>
         </div>
-        <div className="flex space-x-4">
-          <button className="px-6 py-2 border border-[#111D63] text-[#111D63] rounded-lg hover:bg-[#111D63] hover:text-white transition-colors">
-            Back
-          </button>
-          <button className="px-6 py-2 bg-[#111D63] text-white rounded-lg hover:bg-[#0e184f] transition-colors">
-            Proceed
-          </button>
+        {/* Navigation Buttons */}
+        <div className="grid grid-cols-2 gap-6 w-full">
+          <button className="button_v3 ">Back</button>
+          <button className="button_v1 w-full justify-center ">Proceed</button>
         </div>
       </div>
     </div>
@@ -182,42 +180,6 @@ if (
 };
 
 export default CVUpload;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // "use client";
 
@@ -495,54 +457,6 @@ export default CVUpload;
 // };
 
 // export default CVUpload;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // "use client";
 
