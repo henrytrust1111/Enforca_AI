@@ -1,23 +1,17 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Dropbox, GoogleDrive } from "../icons/Icons";
 import { FaCloudUploadAlt, FaTimes } from "react-icons/fa";
-import jsPDF from "jspdf"; // Import jsPDF for PDF creation
-
-declare global {
-  interface Window {
-    ImageCapture: any;
-  }
-}
+import jsPDF from "jspdf";
 
 const CVUpload = () => {
   const [file, setFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
-  const [imageSrc, setImageSrc] = useState<string | null>(null); // To store the image source if taken from cameras
-
-  console.log(imageSrc);
+  const [showModal, setShowModal] = useState(false);
+  const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -60,38 +54,65 @@ const CVUpload = () => {
     setFile(null);
   };
 
-  const handleCameraCapture = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-      const videoTrack = stream.getVideoTracks()[0];
-      const imageCapture = new window.ImageCapture(videoTrack);
+  const handleBrowseClick = () => {
+    setShowModal(true);
+  };
 
-      const photoBlob = await imageCapture.takePhoto();
-      const photoUrl = URL.createObjectURL(photoBlob);
-      setImageSrc(photoUrl);
+  const handleTakePicture = () => {
+    navigator.mediaDevices
+      .getUserMedia({ video: true })
+      .then((stream) => {
+        setCameraStream(stream);
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+        }
+      })
+      .catch((error) => {
+        console.error("Error accessing the camera: ", error);
+      });
+  };
 
-      // Convert image to PDF
-      const pdf = new jsPDF();
-      pdf.addImage(photoUrl, "JPEG", 0, 0, 210, 297); // A4 size
-      const pdfBlob = pdf.output("blob");
-      setFile(new File([pdfBlob], "document.pdf", { type: "application/pdf" }));
+  const handleCapturePicture = () => {
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+    if (video && canvas) {
+      const context = canvas.getContext("2d");
+      if (context) {
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const imageDataUrl = canvas.toDataURL("image/jpeg");
 
-      videoTrack.stop(); // Stop the video stream
-    } catch (err) {
-      console.error("Error capturing photo: ", err);
+        // Convert image to PDF
+        const pdf = new jsPDF();
+        pdf.addImage(imageDataUrl, "JPEG", 10, 10, 190, 0);
+        const pdfBlob = pdf.output("blob");
+        setFile(new File([pdfBlob], "captured.pdf", { type: "application/pdf" }));
+
+        // Stop the camera stream
+        if (cameraStream) {
+          cameraStream.getTracks().forEach((track: MediaStreamTrack) => track.stop());
+          setCameraStream(null);
+        }
+
+        setShowModal(false);
+      }
     }
   };
 
-  const handleSelectFile = () => {
-    document.getElementById("file-upload")?.click();
-  };
-
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+  const handleSelectFromDevice = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "application/pdf";
+    input.onchange = (e: Event) => {
+      const target = e.target as HTMLInputElement;
+      const selectedFile = target.files?.[0];
+      if (selectedFile && selectedFile.type === "application/pdf") {
+        setFile(selectedFile);
+      } else {
+        alert("Only PDF files are supported.");
+      }
+    };
+    input.click();
+    setShowModal(false);
   };
 
   useEffect(() => {
@@ -116,30 +137,6 @@ const CVUpload = () => {
 
   return (
     <div className="flex flex-col items-center justify-center p-4 space-y-6">
-      {/* Modal for selecting the upload method */}
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-lg w-80 text-center">
-            <h3 className="mb-4">Choose Upload Method</h3>
-            <button
-              onClick={handleCameraCapture}
-              className="bg-blue-500 text-white p-2 mb-4 rounded-lg"
-            >
-              Take a Picture of the Document
-            </button>
-            <button
-              onClick={handleSelectFile}
-              className="bg-green-500 text-white p-2 rounded-lg"
-            >
-              Select from Device
-            </button>
-            <button onClick={handleCloseModal} className="mt-4 text-red-500">
-              Cancel
-            </button>
-          </div>
-        </div>
-      )}
-
       {/* Phase 1: Drag and Drop Box */}
       <div
         className={`relative w-full max-w-md p-8 border-2 border-dashed rounded-lg flex flex-col items-center justify-center space-y-4 ${
@@ -165,7 +162,6 @@ const CVUpload = () => {
             >
               <FaTimes className="w-5 h-5 text-gray-600" />
             </button>
-            {/* Display the uploaded PDF */}
             <iframe
               src={URL.createObjectURL(file)}
               width="100%"
@@ -180,16 +176,15 @@ const CVUpload = () => {
             <FaCloudUploadAlt className="w-12 h-12 text-[#111D63]" />
             <p className="text-center text-gray-700">
               Drag and upload your resume here, or{" "}
-              <button
-                onClick={handleOpenModal}
+              <label
+                htmlFor="file-upload"
                 className="text-[#111D63] cursor-pointer underline"
+                onClick={handleBrowseClick}
               >
                 browse
-              </button>
+              </label>
             </p>
-            <p className="text-sm text-gray-500">
-              Only PDF files are supported
-            </p>
+            <p className="text-sm text-gray-500">Only PDF files are supported</p>
           </>
         )}
       </div>
@@ -220,21 +215,65 @@ const CVUpload = () => {
           </button>
         </div>
       </div>
+
+      {/* Modal for Browse Options */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <h2 className="text-lg font-semibold mb-4">Choose an option</h2>
+            <button
+              onClick={handleTakePicture}
+              className="w-full mb-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+            >
+              Take a Picture of the Document
+            </button>
+            <button
+              onClick={handleSelectFromDevice}
+              className="w-full px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+            >
+              Select from Device
+            </button>
+            <button
+              onClick={() => setShowModal(false)}
+              className="w-full mt-4 px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Camera Preview and Capture */}
+      {cameraStream && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <video ref={videoRef} autoPlay className="w-full h-auto mb-4"></video>
+            <canvas ref={canvasRef} className="hidden"></canvas>
+            <button
+              onClick={handleCapturePicture}
+              className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+            >
+              Capture Picture
+            </button>
+            <button
+              onClick={() => {
+                if (cameraStream) {
+                  cameraStream.getTracks().forEach((track: MediaStreamTrack) => track.stop());
+                  setCameraStream(null);
+                }
+              }}
+              className="w-full mt-4 px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
 export default CVUpload;
-
-
-
-
-
-
-
-
-
-
 
 
 
