@@ -44,7 +44,7 @@
 }
 
 .button_v1 {
-  @apply bg-primary text-white px-6 py-3 rounded-[52px] flex items-center gap-2 outline-none;
+  @apply bg-primary text-white px-6 py-3 rounded-[52px] flex items-center gap-2 outline-none font-medium;
 }
 
 .button_v2 {
@@ -52,7 +52,7 @@
 }
 
 .button_v3 {
-  @apply bg-[#F2F7FF] text-[#1F303F] px-6 py-3 rounded-[52px] flex w-full items-center justify-center gap-2 outline-none;
+  @apply bg-[#F2F7FF] text-[#1F303F] px-6 py-3 rounded-[52px] flex w-full font-medium items-center justify-center gap-2 outline-none;
 }
 
 .authInput {

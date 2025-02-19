@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { ChevronUp, ChevronDown } from "lucide-react";
-import {industries, experiences, years} from "@/data/assist"
+import { ChevronUp, ChevronDown, Search, X } from "lucide-react";
+import { industries, experiences, years } from "@/data/assist";
 
 interface DropdownProps {
   label: string;
@@ -69,6 +69,10 @@ const NeedAssessment = () => {
       setSearchValue(""); // Clear the search bar after selection
     };
 
+    const handleClear = () => {
+      setSearchValue("");
+    };
+
     return (
       <div>
         <label className="block text-black font-medium mb-1">{label}</label>
@@ -94,14 +98,36 @@ const NeedAssessment = () => {
             <div
               className={`absolute w-full border-b rounded-b-[8px] bg-white z-10 px-2 border-b-[#36A1C5] border-r border-r-[#36A1C5]`}
             >
-              <input
+              {/* <input
                 type="text"
                 placeholder="Search..."
                 className="pl-3 py-1 border-b focus:outline-none border max-w-2xl rounded-[25px] placeholder:text-sm"
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
                 aria-label="Search dropdown options"
-              />
+              /> */}
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  className="pl-10 py-1 border-b focus:outline-none border max-w-2xl rounded-[25px] placeholder:text-sm w-full"
+                  value={searchValue}
+                  onChange={(e) => setSearchValue(e.target.value)}
+                  aria-label="Search dropdown options"
+                  autoFocus
+                />
+                <Search
+                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                  size={16}
+                />
+                {searchValue && (
+                  <X
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer"
+                    size={16}
+                    onClick={handleClear}
+                  />
+                )}
+              </div>
               <ul
                 role="listbox"
                 className="max-h-40 custom-scrollbar2 overflow-y-auto"
@@ -179,13 +205,9 @@ const NeedAssessment = () => {
       </div>
 
       {/* Navigation Buttons */}
-      <div className="grid grid-cols-2 gap-6">
-        <button className="button_v3">
-          Back
-        </button>
-        <button className="button_v1 w-full justify-center">
-          Proceed
-        </button>
+      <div className="grid grid-cols-2 gap-6 ">
+        <button className="button_v3 ">Back</button>
+        <button className="button_v1 w-full justify-center ">Proceed</button>
       </div>
     </div>
   );
