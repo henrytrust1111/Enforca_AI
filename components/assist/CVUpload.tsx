@@ -9,13 +9,24 @@ const CVUpload = () => {
   const [isDragging, setIsDragging] = useState(false);
 
   const handleFileChange = (e: any) => {
-    const selectedFile = e.target.files[0];
-    if (selectedFile && selectedFile.type === "application/pdf") {
-      setFile(selectedFile);
-    } else {
-      alert("Only PDF files are supported.");
-    }
-  };
+  //   const selectedFile = e.target.files[0];
+  //   if (selectedFile && selectedFile.type === "application/pdf") {
+  //     setFile(selectedFile);
+  //   } else {
+  //     alert("Only PDF files are supported.");
+  //   }
+
+  const selectedFile = e.target.files[0];
+if (
+  selectedFile &&
+  (selectedFile.type === "application/pdf" || 
+   selectedFile.name.toLowerCase().endsWith(".pdf"))
+) {
+  setFile(selectedFile);
+} else {
+  alert("Only PDF files are supported.");
+}
+  }
 
   const handleDrop = (e: any) => {
     e.preventDefault();
