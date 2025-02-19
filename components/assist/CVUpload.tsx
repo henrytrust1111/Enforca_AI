@@ -1,20 +1,15 @@
-"use client";
 
-import React, { useState, useEffect, useRef } from "react";
+"use client"
+import React, { useState, useEffect } from "react";
 import { Dropbox, GoogleDrive } from "../icons/Icons";
-import { FaCloudUploadAlt, FaTimes } from "react-icons/fa";
-import jsPDF from "jspdf";
+import { FaCloudUploadAlt, FaTimes } from "react-icons/fa"; // Import FaTimes for the close icon
 
 const CVUpload = () => {
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
-  const videoRef = useRef<HTMLVideoElement | null>(null);
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[0];
+  const handleFileChange = (e: any) => {
+    const selectedFile = e.target.files[0];
     if (selectedFile && selectedFile.type === "application/pdf") {
       setFile(selectedFile);
     } else {
@@ -22,10 +17,10 @@ const CVUpload = () => {
     }
   };
 
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+  const handleDrop = (e: any) => {
     e.preventDefault();
     setIsDragging(false);
-    const droppedFile = e.dataTransfer.files?.[0];
+    const droppedFile = e.dataTransfer.files[0];
     if (droppedFile && droppedFile.type === "application/pdf") {
       setFile(droppedFile);
     } else {
@@ -33,7 +28,7 @@ const CVUpload = () => {
     }
   };
 
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+  const handleDragOver = (e: any) => {
     e.preventDefault();
     setIsDragging(true);
   };
@@ -51,80 +46,17 @@ const CVUpload = () => {
   };
 
   const handleRemoveFile = () => {
-    setFile(null);
-  };
-
-  const handleBrowseClick = () => {
-    setShowModal(true);
-  };
-
-  const handleTakePicture = () => {
-    navigator.mediaDevices
-      .getUserMedia({ video: true })
-      .then((stream) => {
-        setCameraStream(stream);
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-        }
-      })
-      .catch((error) => {
-        console.error("Error accessing the camera: ", error);
-      });
-  };
-
-  const handleCapturePicture = () => {
-    const video = videoRef.current;
-    const canvas = canvasRef.current;
-    if (video && canvas) {
-      const context = canvas.getContext("2d");
-      if (context) {
-        context.drawImage(video, 0, 0, canvas.width, canvas.height);
-        const imageDataUrl = canvas.toDataURL("image/jpeg");
-
-        // Convert image to PDF
-        const pdf = new jsPDF();
-        pdf.addImage(imageDataUrl, "JPEG", 10, 10, 190, 0);
-        const pdfBlob = pdf.output("blob");
-        setFile(new File([pdfBlob], "captured.pdf", { type: "application/pdf" }));
-
-        // Stop the camera stream
-        if (cameraStream) {
-          cameraStream.getTracks().forEach((track: MediaStreamTrack) => track.stop());
-          setCameraStream(null);
-        }
-
-        setShowModal(false);
-      }
-    }
-  };
-
-  const handleSelectFromDevice = () => {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = "application/pdf";
-    input.onchange = (e: Event) => {
-      const target = e.target as HTMLInputElement;
-      const selectedFile = target.files?.[0];
-      if (selectedFile && selectedFile.type === "application/pdf") {
-        setFile(selectedFile);
-      } else {
-        alert("Only PDF files are supported.");
-      }
-    };
-    input.click();
-    setShowModal(false);
+    setFile(null); // Reset the file state to remove the uploaded file
   };
 
   useEffect(() => {
-    const handlePaste = (e: ClipboardEvent) => {
-      const items = e.clipboardData?.items;
-      if (items) {
-        for (let i = 0; i < items.length; i++) {
-          if (items[i].type === "application/pdf") {
-            const file = items[i].getAsFile();
-            setFile(file);
-            break;
-          }
+    const handlePaste = (e :any) => {
+      const items = e.clipboardData.items;
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].type === "application/pdf") {
+          const file = items[i].getAsFile();
+          setFile(file);
+          break;
         }
       }
     };
@@ -155,6 +87,7 @@ const CVUpload = () => {
         />
         {file ? (
           <div className="text-center w-full">
+            {/* Close icon positioned at the top right */}
             <button
               onClick={handleRemoveFile}
               className="absolute top-2 right-2 p-1 rounded-full hover:bg-gray-200 transition-colors"
@@ -162,6 +95,7 @@ const CVUpload = () => {
             >
               <FaTimes className="w-5 h-5 text-gray-600" />
             </button>
+            {/* Display the uploaded PDF */}
             <iframe
               src={URL.createObjectURL(file)}
               width="100%"
@@ -179,7 +113,6 @@ const CVUpload = () => {
               <label
                 htmlFor="file-upload"
                 className="text-[#111D63] cursor-pointer underline"
-                onClick={handleBrowseClick}
               >
                 browse
               </label>
@@ -215,60 +148,6 @@ const CVUpload = () => {
           </button>
         </div>
       </div>
-
-      {/* Modal for Browse Options */}
-      {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h2 className="text-lg font-semibold mb-4">Choose an option</h2>
-            <button
-              onClick={handleTakePicture}
-              className="w-full mb-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-            >
-              Take a Picture of the Document
-            </button>
-            <button
-              onClick={handleSelectFromDevice}
-              className="w-full px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
-            >
-              Select from Device
-            </button>
-            <button
-              onClick={() => setShowModal(false)}
-              className="w-full mt-4 px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Camera Preview and Capture */}
-      {cameraStream && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg shadow-lg">
-            <video ref={videoRef} autoPlay className="w-full h-auto mb-4"></video>
-            <canvas ref={canvasRef} className="hidden"></canvas>
-            <button
-              onClick={handleCapturePicture}
-              className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-            >
-              Capture Picture
-            </button>
-            <button
-              onClick={() => {
-                if (cameraStream) {
-                  cameraStream.getTracks().forEach((track: MediaStreamTrack) => track.stop());
-                  setCameraStream(null);
-                }
-              }}
-              className="w-full mt-4 px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
@@ -303,17 +182,31 @@ export default CVUpload;
 
 
 
-// "use client"
-// import React, { useState, useEffect } from "react";
+
+
+
+
+
+
+
+
+// "use client";
+
+// import React, { useState, useEffect, useRef } from "react";
 // import { Dropbox, GoogleDrive } from "../icons/Icons";
-// import { FaCloudUploadAlt, FaTimes } from "react-icons/fa"; // Import FaTimes for the close icon
+// import { FaCloudUploadAlt, FaTimes } from "react-icons/fa";
+// import jsPDF from "jspdf";
 
 // const CVUpload = () => {
-//   const [file, setFile] = useState(null);
+//   const [file, setFile] = useState<File | null>(null);
 //   const [isDragging, setIsDragging] = useState(false);
+//   const [showModal, setShowModal] = useState(false);
+//   const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
+//   const videoRef = useRef<HTMLVideoElement | null>(null);
+//   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-//   const handleFileChange = (e) => {
-//     const selectedFile = e.target.files[0];
+//   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+//     const selectedFile = e.target.files?.[0];
 //     if (selectedFile && selectedFile.type === "application/pdf") {
 //       setFile(selectedFile);
 //     } else {
@@ -321,10 +214,10 @@ export default CVUpload;
 //     }
 //   };
 
-//   const handleDrop = (e) => {
+//   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
 //     e.preventDefault();
 //     setIsDragging(false);
-//     const droppedFile = e.dataTransfer.files[0];
+//     const droppedFile = e.dataTransfer.files?.[0];
 //     if (droppedFile && droppedFile.type === "application/pdf") {
 //       setFile(droppedFile);
 //     } else {
@@ -332,7 +225,7 @@ export default CVUpload;
 //     }
 //   };
 
-//   const handleDragOver = (e) => {
+//   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
 //     e.preventDefault();
 //     setIsDragging(true);
 //   };
@@ -350,17 +243,80 @@ export default CVUpload;
 //   };
 
 //   const handleRemoveFile = () => {
-//     setFile(null); // Reset the file state to remove the uploaded file
+//     setFile(null);
+//   };
+
+//   const handleBrowseClick = () => {
+//     setShowModal(true);
+//   };
+
+//   const handleTakePicture = () => {
+//     navigator.mediaDevices
+//       .getUserMedia({ video: true })
+//       .then((stream) => {
+//         setCameraStream(stream);
+//         if (videoRef.current) {
+//           videoRef.current.srcObject = stream;
+//         }
+//       })
+//       .catch((error) => {
+//         console.error("Error accessing the camera: ", error);
+//       });
+//   };
+
+//   const handleCapturePicture = () => {
+//     const video = videoRef.current;
+//     const canvas = canvasRef.current;
+//     if (video && canvas) {
+//       const context = canvas.getContext("2d");
+//       if (context) {
+//         context.drawImage(video, 0, 0, canvas.width, canvas.height);
+//         const imageDataUrl = canvas.toDataURL("image/jpeg");
+
+//         // Convert image to PDF
+//         const pdf = new jsPDF();
+//         pdf.addImage(imageDataUrl, "JPEG", 10, 10, 190, 0);
+//         const pdfBlob = pdf.output("blob");
+//         setFile(new File([pdfBlob], "captured.pdf", { type: "application/pdf" }));
+
+//         // Stop the camera stream
+//         if (cameraStream) {
+//           cameraStream.getTracks().forEach((track: MediaStreamTrack) => track.stop());
+//           setCameraStream(null);
+//         }
+
+//         setShowModal(false);
+//       }
+//     }
+//   };
+
+//   const handleSelectFromDevice = () => {
+//     const input = document.createElement("input");
+//     input.type = "file";
+//     input.accept = "application/pdf";
+//     input.onchange = (e: Event) => {
+//       const target = e.target as HTMLInputElement;
+//       const selectedFile = target.files?.[0];
+//       if (selectedFile && selectedFile.type === "application/pdf") {
+//         setFile(selectedFile);
+//       } else {
+//         alert("Only PDF files are supported.");
+//       }
+//     };
+//     input.click();
+//     setShowModal(false);
 //   };
 
 //   useEffect(() => {
-//     const handlePaste = (e) => {
-//       const items = e.clipboardData.items;
-//       for (let i = 0; i < items.length; i++) {
-//         if (items[i].type === "application/pdf") {
-//           const file = items[i].getAsFile();
-//           setFile(file);
-//           break;
+//     const handlePaste = (e: ClipboardEvent) => {
+//       const items = e.clipboardData?.items;
+//       if (items) {
+//         for (let i = 0; i < items.length; i++) {
+//           if (items[i].type === "application/pdf") {
+//             const file = items[i].getAsFile();
+//             setFile(file);
+//             break;
+//           }
 //         }
 //       }
 //     };
@@ -391,7 +347,6 @@ export default CVUpload;
 //         />
 //         {file ? (
 //           <div className="text-center w-full">
-//             {/* Close icon positioned at the top right */}
 //             <button
 //               onClick={handleRemoveFile}
 //               className="absolute top-2 right-2 p-1 rounded-full hover:bg-gray-200 transition-colors"
@@ -399,7 +354,6 @@ export default CVUpload;
 //             >
 //               <FaTimes className="w-5 h-5 text-gray-600" />
 //             </button>
-//             {/* Display the uploaded PDF */}
 //             <iframe
 //               src={URL.createObjectURL(file)}
 //               width="100%"
@@ -417,6 +371,7 @@ export default CVUpload;
 //               <label
 //                 htmlFor="file-upload"
 //                 className="text-[#111D63] cursor-pointer underline"
+//                 onClick={handleBrowseClick}
 //               >
 //                 browse
 //               </label>
@@ -452,11 +407,71 @@ export default CVUpload;
 //           </button>
 //         </div>
 //       </div>
+
+//       {/* Modal for Browse Options */}
+//       {showModal && (
+//         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+//           <div className="bg-white p-6 rounded-lg shadow-lg">
+//             <h2 className="text-lg font-semibold mb-4">Choose an option</h2>
+//             <button
+//               onClick={handleTakePicture}
+//               className="w-full mb-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+//             >
+//               Take a Picture of the Document
+//             </button>
+//             <button
+//               onClick={handleSelectFromDevice}
+//               className="w-full px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+//             >
+//               Select from Device
+//             </button>
+//             <button
+//               onClick={() => setShowModal(false)}
+//               className="w-full mt-4 px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
+//             >
+//               Cancel
+//             </button>
+//           </div>
+//         </div>
+//       )}
+
+//       {/* Camera Preview and Capture */}
+//       {cameraStream && (
+//         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+//           <div className="bg-white p-6 rounded-lg shadow-lg">
+//             <video ref={videoRef} autoPlay className="w-full h-auto mb-4"></video>
+//             <canvas ref={canvasRef} className="hidden"></canvas>
+//             <button
+//               onClick={handleCapturePicture}
+//               className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+//             >
+//               Capture Picture
+//             </button>
+//             <button
+//               onClick={() => {
+//                 if (cameraStream) {
+//                   cameraStream.getTracks().forEach((track: MediaStreamTrack) => track.stop());
+//                   setCameraStream(null);
+//                 }
+//               }}
+//               className="w-full mt-4 px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
+//             >
+//               Cancel
+//             </button>
+//           </div>
+//         </div>
+//       )}
 //     </div>
 //   );
 // };
 
 // export default CVUpload;
+
+
+
+
+
+
 
 
 
