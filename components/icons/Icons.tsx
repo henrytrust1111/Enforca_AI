@@ -186,3 +186,93 @@ export const GoogleDrive: React.FC<LogoProps> = ({ width, height }) => {
     />
   );
 };
+
+// ArrowRight png icon component
+export const ArrowRight: React.FC<LogoProps> = ({ width, height }) => {
+  return (
+    <Image
+      src="/icons/arrow-circle-right.svg" // Path relative to the public folder
+      alt="arrow"
+      width={width}
+      height={height}
+      priority // Use this prop if the image is critical (e.g., logo)
+    />
+  );
+};
+
+// ArrowRight png icon component
+export const ArrowLeft: React.FC<LogoProps> = ({ width, height }) => {
+  return (
+    <Image
+      src="/icons/arrow-circle-left.svg" // Path relative to the public folder
+      alt="arrow"
+      width={width}
+      height={height}
+      priority // Use this prop if the image is critical (e.g., logo)
+    />
+  );
+};
+
+// ArrowRight png icon component
+export const Close: React.FC<LogoProps> = ({ width, height }) => {
+  return (
+    <Image
+      src="/icons/close.svg" // Path relative to the public folder
+      alt="arrow"
+      width={width}
+      height={height}
+      priority // Use this prop if the image is critical (e.g., logo)
+    />
+  );
+};
+
+// ArrowRight png icon component
+export const MagicWand: React.FC<LogoProps> = ({ width, height }) => {
+  return (
+    <Image
+      src="/icons/magic-wand.svg" // Path relative to the public folder
+      alt="arrow"
+      width={width}
+      height={height}
+      priority // Use this prop if the image is critical (e.g., logo)
+    />
+  );
+};
+
+// ArrowRight png icon component
+export const ArrowRightBlack: React.FC<LogoProps> = ({ width, height }) => {
+  return (
+    <Image
+      src="/icons/arrowRightBlack.png" // Path relative to the public folder
+      alt="success"
+      width={width}
+      height={height}
+      priority // Use this prop if the image is critical (e.g., logo)
+    />
+  );
+};
+
+// Download svg icon component
+export const Download: React.FC<LogoProps> = ({ width, height }) => {
+  return (
+    <Image
+      src="/icons/download.svg" // Path relative to the public folder
+      alt="download"
+      width={width}
+      height={height}
+      priority // Use this prop if the image is critical (e.g., logo)
+    />
+  );
+};
+// CVImage png image component
+export const CVImage: React.FC<LogoProps> = ({ width, height }) => {
+  return (
+    <Image
+      src="/images/Cv/profile.png" // Path relative to the public folder
+      alt="profile"
+      width={width}
+      height={height}
+      priority // Use this prop if the image is critical (e.g., logo)
+    />
+  );
+};

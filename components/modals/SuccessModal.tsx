@@ -34,7 +34,10 @@ const SuccessModal = () => {
 
         {/* Button */}
         <div className="flex justify-center">
-          <button className="w-full button_v1 flex justify-center" onClick={() => router.push("/login")}>
+          <button
+            className="w-full button_v1 flex justify-center"
+            onClick={() => router.push("/login")}
+          >
             Login
           </button>
         </div>
