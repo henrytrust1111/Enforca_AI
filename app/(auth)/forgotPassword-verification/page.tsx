@@ -2,7 +2,8 @@
 
 import AuthLeft2 from "@/components/auth/AuthLeft2";
 import ForgetPasswordRightLayout from "@/components/auth/layout/ForgetPasswordRightLayout";
-import OtpInputSection from "@/components/auth/OtpInputSection";
+import OtpInputSection2 from "@/components/auth/OtpInputSection2";
+import { useEffect, useState } from "react";
 
 const maskEmail = (email: string) => {
   const [name, domain] = email.split("@");
@@ -10,6 +11,14 @@ const maskEmail = (email: string) => {
   return `${maskedName}@${domain}`;
 };
 const Page = () => {
+    const [myEmail, setMyEmail] = useState<string | null>(null);
+  
+    useEffect(() => {
+      if (typeof window !== "undefined") {
+        const email = localStorage.getItem("email");
+        setMyEmail(email);
+      }
+    }, []);
   return (
     <div className="grid lg:grid-cols-2 min-h-screen">
       {/* Left Column */}
@@ -20,11 +29,11 @@ const Page = () => {
         <div className="font-medium mb-6 sm:mb-6">
           <p className="font-medium">We’ve sent a 6 digit code to your email</p>
           {/* This is the name of the person that tried signing Up */}
-          <p className="font-bold">{maskEmail("mike@example.com")}</p>
+          <p className="font-bold">{myEmail && maskEmail(myEmail)}</p>
         </div>
 
         <div className="w-full space-y-16 sm:space-y-6 mt-4 sm:mt-12">
-          <OtpInputSection />
+          <OtpInputSection2 />
         </div>
       </ForgetPasswordRightLayout>
     </div>

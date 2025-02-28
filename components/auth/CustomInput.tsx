@@ -17,12 +17,14 @@ const CustomInput: React.FC<CustomInputProps> = ({
   onChange,
   icon,
   className = "",
-  classNameLabel = "",
+  classNameLabel = ""
 }) => {
   return (
     <div className="relative w-full">
-     {value && (
-        <label className={`absolute block text-gray-700 font-medium text-xs -top-2 left-2 bg-white px-1 ${classNameLabel}`}>
+      {value && (
+        <label
+          className={`absolute block text-gray-700 font-medium text-xs -top-2 left-2 bg-white px-1 ${classNameLabel}`}
+        >
           {placeholder}
         </label>
       )}
@@ -37,28 +39,14 @@ const CustomInput: React.FC<CustomInputProps> = ({
         placeholder={placeholder}
         value={value}
         onChange={onChange}
+        required
+        aria-required="true"
       />
     </div>
   );
 };
 
 export default CustomInput;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // import React from "react";
 // import { BiEnvelope } from "react-icons/bi";

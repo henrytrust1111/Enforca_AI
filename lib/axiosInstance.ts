@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "https://api-eventparcel.onrender.com/api/v1",
+  baseURL: "https://api-enforca-ai.onrender.com/api/v1/user",
   headers: { "Content-Type": "application/json" }
 });
 

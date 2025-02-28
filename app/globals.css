@@ -47,6 +47,10 @@
   @apply bg-primary text-white px-6 py-3 rounded-[52px] flex items-center gap-2 outline-none font-medium;
 }
 
+.animateBtn_v1 {
+  @apply bg-primary text-white px-6 py-3 rounded-[52px] flex items-center gap-2 outline-none font-medium relative justify-center overflow-hidden shadow-2xl transition-all duration-300 before:absolute before:inset-0 before:border-0 before:border-white before:duration-100 before:ease-linear hover:bg-white hover:text-primary hover:shadow-primary-200 hover:before:border-[25px];
+}
+
 .button_v2 {
   @apply bg-primary-200 text-white px-6 py-3 rounded-[52px] flex items-center gap-2 outline-none;
 }

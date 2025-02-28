@@ -9,7 +9,7 @@ import { LiaArrowRightSolid } from "react-icons/lia";
 
 const Header: React.FC = () => {
   const pathname = usePathname();
-  const router = useRouter()
+  const router = useRouter();
   const isTransparentBg = pathname === "/" || pathname === "/signup";
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -22,8 +22,8 @@ const Header: React.FC = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  function handleDashboardClick () {
-    router.push("/login")
+  function handleDashboardClick() {
+    router.push("/login");
   }
 
   return (
@@ -37,20 +37,37 @@ const Header: React.FC = () => {
         {/* Logo Section */}
         <div className="flex items-center space-x-2 w-max">
           <Logo width={40} height={40} />
-          <span className={`text-base md:text-xl font-bold ${isScrolled ? "text-black" : "text-white"}`}>
+          <span
+            className={`text-base md:text-xl font-bold ${
+              isScrolled ? "text-black" : "text-white"
+            }`}
+          >
             GetreKruitd
           </span>
         </div>
 
         {/* Desktop Navigation */}
-        <nav className={`hidden md:flex justify-end space-x-8 font-medium ${isTransparentBg ? "lg:text-white" : "text-black"} ${isScrolled ? "!text-black" : ""}`}>
-          <a href="#" className="hover:text-gray-900 transition whitespace-nowrap">Schedule Consultation</a>
-          <a href="#" className="hover:text-gray-900 transition">Internship/Mentorship</a>
+        <nav
+          className={`hidden md:flex justify-end space-x-8 font-medium ${
+            isTransparentBg ? "lg:text-white" : "text-black"
+          } ${isScrolled ? "!text-black" : ""}`}
+        >
+          <a
+            href="#"
+            className="hover:text-gray-900 transition whitespace-nowrap"
+          >
+            Schedule Consultation
+          </a>
+          <a href="#" className="hover:text-gray-900 transition">
+            Internship/Mentorship
+          </a>
         </nav>
 
         {/* My Dashboard (Desktop) */}
         <div className="hidden md:flex justify-end">
-          <button onClick={handleDashboardClick} className="button_v1">My Dashboard</button>
+          <button onClick={handleDashboardClick} className="animateBtn_v1">
+            <span className="relative z-10"> My Dashboard</span>
+          </button>
         </div>
 
         {/* Mobile Menu Icon */}
@@ -59,7 +76,7 @@ const Header: React.FC = () => {
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className={`${isScrolled ? "text-black" : "text-white"}`}
           >
-            {isMobileMenuOpen ? <TfiClose  /> : <HiMenuAlt4 size={32} />}
+            {isMobileMenuOpen ? <TfiClose /> : <HiMenuAlt4 size={32} />}
           </button>
         </div>
       </div>
@@ -67,7 +84,11 @@ const Header: React.FC = () => {
       {/* Mobile Full-Screen Overlay Menu */}
       <div
         className={`fixed inset-0 z-50 bg-[#036DF5] text-white md:hidden transform transition-transform ease-in-out duration-300
-          ${isMobileMenuOpen ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"}
+          ${
+            isMobileMenuOpen
+              ? "translate-x-0 opacity-100"
+              : "translate-x-full opacity-0"
+          }
         `}
       >
         {/* Close Button */}
@@ -80,17 +101,29 @@ const Header: React.FC = () => {
 
         <nav className="mt-20 px-6 flex flex-col space-y-6 transition-opacity duration-300">
           {/* Menu Items */}
-          <a href="#" className="text-2xl flex items-center justify-between py-6 border-b">
+          <a
+            href="#"
+            className="text-2xl flex items-center justify-between py-6 border-b"
+          >
             <span>Review Resume</span>
-            <span className="ml-2"><LiaArrowRightSolid /></span>
+            <span className="ml-2">
+              <LiaArrowRightSolid />
+            </span>
           </a>
-          <a href="#" className="text-2xl flex items-center justify-between py-6 border-b">
+          <a
+            href="#"
+            className="text-2xl flex items-center justify-between py-6 border-b"
+          >
             <span>Schedule Consultation</span>
-            <span className="ml-2"><LiaArrowRightSolid /></span>
+            <span className="ml-2">
+              <LiaArrowRightSolid />
+            </span>
           </a>
 
           {/* My Dashboard */}
-          <a href="/login" className="text-base font-bold text-[#9AC5FB] pt-8">My Dashboard</a>
+          <a href="/login" className="text-base font-bold text-[#9AC5FB] pt-8">
+            My Dashboard
+          </a>
         </nav>
       </div>
     </header>
@@ -98,18 +131,6 @@ const Header: React.FC = () => {
 };
 
 export default Header;
-
-
-
-
-
-
-
-
-
-
-
-
 
 // "use client";
 

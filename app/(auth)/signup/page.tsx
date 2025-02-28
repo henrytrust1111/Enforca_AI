@@ -77,6 +77,7 @@ const Signup: React.FC = () => {
     try {
       const response = await axiosInstance.post("/signup", formData);
       toast.success(response.data.message || "Signup successful!");
+      localStorage.setItem("email", formData.email);
 
       // Cookies.set("email", formData.email, { expires: 1, path: "/" }); // expire in one day
 
@@ -226,7 +227,7 @@ const Signup: React.FC = () => {
                 </div>
 
                 {/* Password Requirements */}
-                {(formData.password) && (
+                {formData.password && (
                   <ul className="mt-2 text-sm">
                     {requirements.map((req, index) => {
                       const isValid = req.regex.test(formData.password);
@@ -285,28 +286,6 @@ const Signup: React.FC = () => {
 };
 
 export default Signup;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // "use client";
 

@@ -6,7 +6,6 @@ import { useRouter } from "next-nprogress-bar";
 import { Logo2 } from "@/components/icons/Icons";
 import OtpInputSection from "@/components/auth/OtpInputSection";
 
-
 const maskEmail = (email: string) => {
   const [name, domain] = email.split("@");
   const maskedName = name.slice(0, 5) + "*****";
@@ -16,8 +15,7 @@ const maskEmail = (email: string) => {
 const Verification = () => {
   const router = useRouter();
   const [myEmail, setMyEmail] = useState<string | null>(null);
-console.log(myEmail);
-
+  console.log(myEmail);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -39,10 +37,16 @@ console.log(myEmail);
       {/* Right Section (Login Form) */}
       <div className="flex flex-col h-screen sm:h-full items-center sm:justify-center sm:p-6 md:bg-white">
         <div className="relativew-full max-w-sm bg-[#F4F8FD] sm:bg-transparent">
-          <a href="/signup" className="font-medium absolute top-20 hidden sm:block py-4 sm:py-0 sm:right-12 cursor-pointer hover:underline hover:underline-offset-2 hover:text-primary">
+          <a
+            href="/signup"
+            className="font-medium absolute top-20 hidden sm:block py-4 sm:py-0 sm:right-12 cursor-pointer hover:underline hover:underline-offset-2 hover:text-primary"
+          >
             Go Back
           </a>
-          <a href="/signup" className="font-medium absolute top-20 left-9 sm:hidden py-4 sm:py-0 sm:right-12 cursor-pointer hover:underline hover:underline-offset-2 hover:text-primary">
+          <a
+            href="/signup"
+            className="font-medium absolute top-20 left-9 sm:hidden py-4 sm:py-0 sm:right-12 cursor-pointer hover:underline hover:underline-offset-2 hover:text-primary"
+          >
             Go Back
           </a>
           <div className="sm:text-center pb-16 flex flex-col sm:items-center text-black-100 gap-12 p-6 sm:p-0 mb-12">
@@ -70,7 +74,7 @@ console.log(myEmail);
                   We’ve sent a 6 digit code to your email
                 </p>
                 {/* This is the name of the person that tried signing Up */}
-                <p className="font-bold">{maskEmail("mike@example.com")}</p>
+                <p className="font-bold">{myEmail && maskEmail(myEmail)}</p>
               </div>
             </div>
             <OtpInputSection />
@@ -82,6 +86,14 @@ console.log(myEmail);
 };
 
 export default Verification;
+
+
+
+
+
+
+
+
 
 // "use client";
 

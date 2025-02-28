@@ -15,7 +15,7 @@ const otpSchema = z
   .array(z.string().length(1, "Each digit must be 1 character"))
   .length(6, "OTP must be exactly 6 digits");
 
-const OtpInputSection = () => {
+const OtpInputSection2 = () => {
   const router = useRouter();
   const [otp, setOtp] = useState<string[]>(["", "", "", "", "", ""]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -86,7 +86,7 @@ const OtpInputSection = () => {
       toast.success(response?.data?.message);
 
       setTimeout(() => {
-        router.push("/login");
+        router.push("/reset-password");
       }, 3000);
     } catch (error: unknown) {
       console.error("Verification error:", error);
@@ -199,5 +199,5 @@ const OtpInputSection = () => {
 };
 
 
-export default OtpInputSection;
+export default OtpInputSection2;
 
