@@ -5,7 +5,6 @@ import ForgetPasswordRightLayout from "@/components/auth/layout/ForgetPasswordRi
 import { useEffect, useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import "react-phone-input-2/lib/style.css";
-// import { useRouter } from "next-nprogress-bar";
 import { toast, ToastContainer } from "react-toastify";
 import { BiLoaderCircle, BiLockAlt } from "react-icons/bi";
 import axiosInstance from "@/lib/axiosInstance";
