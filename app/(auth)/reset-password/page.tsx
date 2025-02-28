@@ -1,5 +1,4 @@
 "use client";
-
 import AuthLeft2 from "@/components/auth/AuthLeft2";
 import ForgetPasswordRightLayout from "@/components/auth/layout/ForgetPasswordRightLayout";
 import { useEffect, useState } from "react";
