@@ -15,7 +15,7 @@ import SuccessModal from "@/components/modals/SuccessModal";
 interface FormData {
   email: string;
   password: string;
-  confirmPassword: string;    
+  confirmPassword: string;
 }
 
 const ResetPassword = () => {
@@ -29,9 +29,8 @@ const ResetPassword = () => {
   const [formData, setFormData] = useState<FormData>({
     email: "",
     password: "",
-    confirmPassword: "",
+    confirmPassword: ""
   });
-
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -72,14 +71,14 @@ const ResetPassword = () => {
     setIsLoading(true);
 
     try {
-    await axiosInstance.post("/reset-password", formData);
-      
-      // Show Success Modal
-      setIsSuccessModalVisible(true)
+      await axiosInstance.post("/reset-password", formData);
 
+      // Show Success Modal
+      setIsSuccessModalVisible(true);
     } catch (error: any) {
       toast.error(
-        error.response?.data?.message || "Password reset failed. Please try again."
+        error.response?.data?.message ||
+          "Password reset failed. Please try again."
       );
     } finally {
       setIsLoading(false);
@@ -216,36 +215,18 @@ const ResetPassword = () => {
       <SuccessModal
         onClose={() => setIsSuccessModalVisible(false)}
         isVisible={isSuccessModalVisible}
+        title="Password has been reset successfully"
+        subtitle="You can now proceed to login"
+        buttonText="Login"
+        route="/login"
       />
-      
+
       <ToastContainer />
     </>
   );
 };
 
 export default ResetPassword;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // "use client";
 
@@ -261,7 +242,6 @@ export default ResetPassword;
 // import { CheckCircle, XCircle } from "lucide-react";
 // import CustomInput from "@/components/auth/CustomInput";
 // import SuccessModal from "@/components/modals/SuccessModal";
-
 
 // interface FormData {
 //   email: string;
@@ -294,7 +274,7 @@ export default ResetPassword;
 //         const email = localStorage.getItem("email");
 //         setFormData.email(email);
 //       }
-  
+
 //     }, []);
 
 //   // Validate input fields
