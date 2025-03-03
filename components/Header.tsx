@@ -28,7 +28,7 @@ const Header: React.FC = () => {
 
   return (
     <header
-      className={`w-full font-sharpsans py-4 px-6 md:px-8 lg:px-20 fixed right-0 top-0 z-10 transition-colors
+      className={`w-full font-sharpsans py-4 px-6 md:px-8 lg:px-20 fixed right-0 top-0 z-50 transition-colors
         ${isTransparentBg ? "bg-transparent" : "bg-white shadow-md text-black"}
         ${isScrolled ? "bg-white shadow-lg text-black" : ""}
       `}

@@ -264,11 +264,24 @@ export const Download: React.FC<LogoProps> = ({ width, height }) => {
     />
   );
 };
+
 // CVImage png image component
 export const CVImage: React.FC<LogoProps> = ({ width, height }) => {
   return (
     <Image
       src="/images/Cv/profile.png" // Path relative to the public folder
+      alt="profile"
+      width={width}
+      height={height}
+      priority // Use this prop if the image is critical (e.g., logo)
+    />
+  );
+};
+// LoadingState gif component
+export const LoadingAnimation: React.FC<LogoProps> = ({ width, height }) => {
+  return (
+    <Image
+      src="/images/loadingState.gif" // Path relative to the public folder
       alt="profile"
       width={width}
       height={height}

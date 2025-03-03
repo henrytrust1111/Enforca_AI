@@ -14,6 +14,11 @@ import ContinueWithEmail from "@/components/auth/ContinueWithEmail";
 import CustomInput from "@/components/auth/CustomInput";
 import SuccessModal from "@/components/modals/SuccessModal";
 
+interface Errors {
+  email: string;
+  password: string;
+}
+
 const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
@@ -22,26 +27,23 @@ const Login: React.FC = () => {
   const router = useRouter();
   const [errors, setErrors] = useState({ email: "", password: "" });
   const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
 
-
-  const validateInput = (name: string, value: string) => {
+  const validateInput = (name: keyof Errors, value: string) => {
     let errorMessage = "";
 
-    if (name === "email") {
-      if (!/^\S+@\S+\.\S+$/.test(value)) {
-        errorMessage = "Enter a valid email address";
-      }
+    if (name === "email" && !/^\S+@\S+\.\S+$/.test(value)) {
+      errorMessage = "Enter a valid email address";
+    } else if (name === "password" && value.length < 8) {
+      errorMessage = "Password must be at least 8 characters long";
     }
 
     setErrors((prev) => ({ ...prev, [name]: errorMessage }));
   };
 
-  const handleChange = (name: string, value: string) => {
-    if (name === "email") {
-      setEmail(value);
-    } else if (name === "password") {
-      setPassword(value);
-    }
+  const handleChange = (name: keyof Errors, value: string) => {
+    if (name === "email") setEmail(value);
+    else if (name === "password") setPassword(value);
     validateInput(name, value);
   };
 
@@ -55,9 +57,14 @@ const Login: React.FC = () => {
       setLoading(true);
       const response = await axiosInstance.post("/login", { email, password });
 
-      toast.success("Login successful!");
-      localStorage.setItem("authToken", response.data.token);
-      router.push("/");
+      setIsSuccessModalVisible(true);
+      // Store the token based on the rememberMe selection
+      if (rememberMe) {
+        localStorage.setItem("authToken", response.data.token);
+      } else {
+        sessionStorage.setItem("authToken", response.data.token);
+      }
+      // router.push("/");
     } catch (error: any) {
       if (
         error.response?.data?.message ===
@@ -153,13 +160,16 @@ const Login: React.FC = () => {
                         type={showPassword ? "text" : "password"}
                         placeholder="Enter your password"
                         value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        onChange={(e) => handleChange("password", e.target.value)}
                         icon={<BiLockAlt size={20} />}
                         className="pl-10"
                       />
                       <button
                         className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
                         onClick={() => setShowPassword(!showPassword)}
+                        aria-label={
+                          showPassword ? "Hide password" : "Show password"
+                        }
                       >
                         {showPassword ? (
                           <EyeOff size={20} />
@@ -174,7 +184,14 @@ const Login: React.FC = () => {
                 {/* Remember Me and Forgot Password */}
                 <div className="flex justify-between text-xs text-[#505959] font-semibold">
                   <label className="flex items-center">
-                    <input type="checkbox" className="mr-2" /> Remember Me
+                    <input
+                      type="checkbox"
+                      id="checkbox"
+                      className="mr-2"
+                      checked={rememberMe}
+                      onChange={(e) => setRememberMe(e.target.checked)}
+                    />{" "}
+                    Remember Me
                   </label>
                   <a href="/forgot-password" className="">
                     Forgot Password?
@@ -209,8 +226,8 @@ const Login: React.FC = () => {
       <SuccessModal
         onClose={() => setIsSuccessModalVisible(false)}
         isVisible={isSuccessModalVisible}
-        title="Password has been reset successfully"
-        subtitle="You can now proceed to login"
+        title="LoggedIn successfully"
+        subtitle="You can now proceed to dashboard"
         buttonText="Dashboard"
         route="/"
       />
