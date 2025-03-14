@@ -76,7 +76,7 @@ const OtpInputSection = () => {
         return;
       }
 
-      const response = await axiosInstance.post("/verify-otp", {
+      const response = await axiosInstance.post("user/verify-otp", {
         email,
         otp: otpCode
       });
@@ -108,7 +108,7 @@ const OtpInputSection = () => {
         return;
       }
 
-      const response = await axiosInstance.post("/resend-otp", {
+      const response = await axiosInstance.post("user/resend-otp", {
         email
       });
 

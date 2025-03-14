@@ -71,7 +71,7 @@ const ResetPassword = () => {
     setIsLoading(true);
 
     try {
-      await axiosInstance.post("/reset-password", formData);
+      await axiosInstance.post("user/reset-password", formData);
 
       // Show Success Modal
       setIsSuccessModalVisible(true);

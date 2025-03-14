@@ -15,7 +15,12 @@ interface DropdownProps {
 }
 
 interface NeedAssessmentProps {
-  onProceed: () => void;
+  onProceed: (data: {
+    industry: string;
+    priorExperience: string;
+    experienceYears: string;
+    skills: string;
+  }) => void;
 }
 
 const NeedAssessment: React.FC<NeedAssessmentProps> = ({ onProceed }) => {
@@ -208,7 +213,12 @@ const NeedAssessment: React.FC<NeedAssessmentProps> = ({ onProceed }) => {
               alert("Please fill out all fields before proceeding.");
               return;
             }
-            onProceed();
+            onProceed({
+              industry: selectedIndustry,
+              priorExperience: selectedExperience,
+              experienceYears: selectedYears,
+              skills: skills,
+            });
           }}
         >
           Proceed
@@ -232,9 +242,21 @@ export default NeedAssessment;
 
 
 
+
+
+
+
+
+
+
+
+
+
+// "use client";
 // import React, { useState } from "react";
 // import { ChevronUp, ChevronDown, Search, X } from "lucide-react";
 // import { industries, experiences, years } from "@/data/assist";
+// import { useRouter } from "next-nprogress-bar";
 
 // interface DropdownProps {
 //   label: string;
@@ -246,7 +268,11 @@ export default NeedAssessment;
 //   setSelectedItem: React.Dispatch<React.SetStateAction<string>>;
 // }
 
-// const NeedAssessment = () => {
+// interface NeedAssessmentProps {
+//   onProceed: () => void;
+// }
+
+// const NeedAssessment: React.FC<NeedAssessmentProps> = ({ onProceed }) => {
 //   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 //   const [industrySearch, setIndustrySearch] = useState("");
 //   const [experienceSearch, setExperienceSearch] = useState("");
@@ -255,24 +281,6 @@ export default NeedAssessment;
 //   const [selectedIndustry, setSelectedIndustry] = useState("");
 //   const [selectedExperience, setSelectedExperience] = useState("");
 //   const [selectedYears, setSelectedYears] = useState("");
-
-//   // const industries = [
-//   //   "Technology",
-//   //   "Healthcare",
-//   //   "Finance",
-//   //   "Education",
-//   //   "Marketing",
-//   //   "Engineering",
-//   //   "Retail",
-//   //   "Hospitality"
-//   // ];
-//   // const experiences = [
-//   //   "Yes",
-//   //   "No",
-//   //   "Internship Experience",
-//   //   "Freelance Experience"
-//   // ];
-//   // const years = ["0-1 years", "2-5 years", "5-10 years", "10+ years"];
 
 //   const toggleDropdown = (dropdownName: string) => {
 //     setOpenDropdown((prev) => (prev === dropdownName ? null : dropdownName));
@@ -292,7 +300,7 @@ export default NeedAssessment;
 //     searchValue,
 //     setSearchValue,
 //     selectedItem,
-//     setSelectedItem
+//     setSelectedItem,
 //   }) => {
 //     const isOpen = openDropdown === dropdownName;
 //     const filteredItems = filterItems(items, searchValue);
@@ -309,7 +317,9 @@ export default NeedAssessment;
 
 //     return (
 //       <div>
-//         <label className="block text-black font-medium mb-1">{label}</label>
+//         <label className="block text-black font-medium mb-1">
+//           {label}
+//         </label>
 //         <div className="relative">
 //           <button
 //             className={`w-full p-3 flex justify-between items-center bg-white shadow-sm ${
@@ -332,7 +342,6 @@ export default NeedAssessment;
 //             <div
 //               className={`absolute w-full border-b rounded-b-[8px] bg-white z-10 px-2 border-b-[#36A1C5] border-r border-r-[#36A1C5]`}
 //             >
-
 //               <div className="relative">
 //                 <input
 //                   type="text"
@@ -360,7 +369,7 @@ export default NeedAssessment;
 //                 className="max-h-40 custom-scrollbar2 overflow-y-auto"
 //               >
 //                 {filteredItems.length > 0 ? (
-//                   filteredItems.map((item,index) => (
+//                   filteredItems.map((item, index) => (
 //                     <li
 //                       key={index}
 //                       role="option"
@@ -383,6 +392,18 @@ export default NeedAssessment;
 //       </div>
 //     );
 //   };
+
+//   // Check if all fields have a value
+//   const isFormComplete =
+//     selectedIndustry !== "" &&
+//     selectedExperience !== "" &&
+//     selectedYears !== "" &&
+//     skills.trim() !== "";
+//     const router = useRouter()
+
+//     const handleBackClick = () => {
+//       router.push("/")
+//     };
 
 //   return (
 //     <div className="space-y-6 max-w-lg mx-auto">
@@ -419,8 +440,7 @@ export default NeedAssessment;
 //       {/* Skills Input */}
 //       <div>
 //         <label className="block text-gray-700 font-medium mb-1">
-//           What are your top 3-5 skills that are most relevant to your desired
-//           role(s)?
+//           What are your top 3-5 skills that are most relevant to your desired role(s)?
 //         </label>
 //         <textarea
 //           className="w-full p-3 border rounded-[8px] focus:ring focus:ring-[#36A1C5] outline-none"
@@ -432,12 +452,26 @@ export default NeedAssessment;
 //       </div>
 
 //       {/* Navigation Buttons */}
-//       <div className="grid grid-cols-2 gap-6 ">
-//         <button className="button_v3 ">Back</button>
-//         <button className="button_v1 w-full justify-center ">Proceed</button>
+//       <div className="grid grid-cols-2 gap-6">
+//         <button onClick={handleBackClick} className="button_v3">Back</button>
+//         <button
+//           className={`button_v1 w-full justify-center ${!isFormComplete ? "opacity-50 cursor-not-allowed" : ""}`}
+//           disabled={!isFormComplete}
+//           onClick={() => {
+//             if (!isFormComplete) {
+//               alert("Please fill out all fields before proceeding.");
+//               return;
+//             }
+//             onProceed();
+//           }}
+//         >
+//           Proceed
+//         </button>
 //       </div>
 //     </div>
 //   );
 // };
 
 // export default NeedAssessment;
+
+

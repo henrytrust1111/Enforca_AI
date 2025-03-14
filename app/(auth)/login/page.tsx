@@ -55,7 +55,7 @@ const Login: React.FC = () => {
 
     try {
       setLoading(true);
-      const response = await axiosInstance.post("/login", { email, password });
+      const response = await axiosInstance.post("user/login", { email, password });
 
       setIsSuccessModalVisible(true);
       // Store the token based on the rememberMe selection

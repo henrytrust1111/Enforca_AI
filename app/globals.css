@@ -10,6 +10,33 @@
   margin-top: 65px;
 }
 
+/* Global CSS */
+.pdf-container {
+  /* width: 210mm !important; */
+  /* min-height: 297mm; */
+  /* box-shadow: 0 0 10px rgba(0,0,0,0.1); */
+  background-color: green;
+  /* padding: 5mm; */
+  /* margin: 0 auto; */
+  /* margin: 20mm 25mm 30mm 25mm; Larger bottom margin */
+}
+
+/* Remove fixed heights from templates */
+.cv-template {
+  height: auto !important;
+  overflow: visible !important;
+}
+
+/* Ensure content flows naturally */
+ul, li, p, div {
+  page-break-inside: avoid;
+}
+
+.section {
+  margin-bottom: 1.5rem;
+  page-break-after: avoid;
+}
+
 @font-face {
   font-family: "SharpSans";
   src: url("/fonts/SharpSans.otf") format("opentype");

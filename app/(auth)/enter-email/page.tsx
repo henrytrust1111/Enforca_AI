@@ -43,7 +43,7 @@ const EnterMail = () => {
     setIsLoading(true);
 
     try {
-      const response = await axiosInstance.post("/forgot-password", { email });
+      const response = await axiosInstance.post("user/forgot-password", { email });
       toast.success(response.data.message || "Email sent successfully!");
 
       // Redirect to forgotPassword-verification page

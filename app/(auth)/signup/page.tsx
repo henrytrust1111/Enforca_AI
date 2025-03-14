@@ -75,7 +75,7 @@ const Signup: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const response = await axiosInstance.post("/signup", formData);
+      const response = await axiosInstance.post("user/signup", formData);
       toast.success(response.data.message || "Signup successful!");
       localStorage.setItem("email", formData.email);
 
