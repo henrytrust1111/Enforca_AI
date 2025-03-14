@@ -8,7 +8,7 @@ import {
   GlobeAltIcon
 } from "@heroicons/react/24/outline";
 import { MailIcon } from "lucide-react";
-import { CVImage, Download } from "../icons/Icons";
+import { CVImage } from "../icons/Icons";
 
 export const CV_Template1: React.FC = () => {
   const skills = [
