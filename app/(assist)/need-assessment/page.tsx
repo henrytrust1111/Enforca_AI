@@ -10,15 +10,17 @@ import CVUpload from "@/components/assist/CVUpload";
 import axiosInstance from "@/lib/axiosInstance";
 import toast from "react-hot-toast";
 import { ToastContainer } from "react-toastify";
+import Cookies from "js-cookie";
+import LoadingState from "@/components/modals/LoadingState";
 
 const Assessment: React.FC = () => {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("Need Assessment");
   const [needAssessmentComplete, setNeedAssessmentComplete] = useState(false);
-  const [industry, setIndustry] = useState('');
-  const [priorExperience, setPriorExperience] = useState('');
-  const [experienceYears, setExperienceYears] = useState('');
-  const [skills, setSkills] = useState('');
+  const [industry, setIndustry] = useState("");
+  const [priorExperience, setPriorExperience] = useState("");
+  const [experienceYears, setExperienceYears] = useState("");
+  const [skills, setSkills] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleProceedFromAssessment = (data: {
@@ -38,23 +40,36 @@ const Assessment: React.FC = () => {
   // Handle CV upload
   const handleCVUploadProceed = async (file: File) => {
     const formData = new FormData();
-    formData.append('industry', industry);
-    formData.append('priorExperience', priorExperience);
-    formData.append('experienceYears', experienceYears);
-    formData.append('skills', skills);
-    formData.append('resume', file);
+    formData.append("industry", industry);
+    formData.append("priorExperience", priorExperience);
+    formData.append("experienceYears", experienceYears);
+    formData.append("skills", skills);
+    formData.append("resume", file);
 
     try {
       setLoading(true);
-      await axiosInstance.post('/resumes/upload-analyze', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
+      const response = await axiosInstance.post(
+        "/resumes/upload-analyze",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" }
+        }
+      );
       // Handle success (e.g., redirect or show result)
-      router.push('/cv-board');
+      localStorage.setItem("cvData", JSON.stringify(response.data));
+      // Store cvData in cookies
+      // Cookies.set("cvData", JSON.stringify(response.data), {
+      //   expires: 1, // 1 day expiration
+      //   path: "/" // Accessible throughout the site
+      // });
+
+      Cookies.set("cvData", "you are a valid user", { expires: 1, path: "/" }); //expire in one day
+
+      router.push("/cv-board");
     } catch (error: any) {
-      console.error('Upload failed:', error);
-     toast(error.response.data.message, { icon: '❌' });
-    }finally{
+      console.error("Upload failed:", error);
+      toast(error.response.data.message, { icon: "❌" });
+    } finally {
       setLoading(false);
     }
   };
@@ -74,63 +89,71 @@ const Assessment: React.FC = () => {
 
   return (
     <>
-    <ToastContainer />
-    <div className="grid lg:grid-cols-2 min-h-screen">
-      {/* Left Section (Image & Text) */}
-      <AuthLeft />
+      <ToastContainer />
+      {loading && (
+        // <div className="fixed top-0 left-0 z-50 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
+        //   <div className="bg-white p-4 rounded-lg shadow-lg">
+        //     <p className="text-center">Uploading and analyzing your CV...</p>
+        //   </div>
+        // </div>
+        <LoadingState />
+      )}
+      <div className="grid lg:grid-cols-2 min-h-screen">
+        {/* Left Section (Image & Text) */}
+        <AuthLeft />
 
-      {/* Right Section (Form Section) */}
-      <div className="flex flex-col h-screen sm:h-full items-center sm:justify-center sm:p-6 md:bg-white">
-        <div className="w-full max-w-sm bg-[#F4F8FD] sm:bg-transparent md:space-y-12">
-          <div className="sm:text-center flex flex-col sm:items-center text-black-100 gap-6 p-4 sm:p-0">
-            {/* Logo */}
-            <div
-              onClick={handleClick}
-              className="flex items-center space-x-2 w-max cursor-pointer"
-            >
-              <Logo2 width={35} height={35} />
-              <span className="text-base md:text-xl mt-2 font-bold">
-                GetreKruitd
-              </span>
-            </div>
-          </div>
-          <div className="rounded-t-[40px] sm:rounded-t-none p-4 sm:p-0 mt-3 sm:mt-0 bg-white">
-            {/* Tabs */}
-            <div className="flex border-b mb-4 w-full">
-              <button
-                className={`flex-1 p-2 text-center text-sm flex items-center justify-center gap-3 font-medium ${
-                  activeTab === "Need Assessment"
-                    ? "border-b-2 border-[#9CB3D7] text-[#36A1C5] md:bg-[#F7FBFD]"
-                    : "text-gray-500"
-                }`}
-                onClick={() => setActiveTab("Need Assessment")}
+        {/* Right Section (Form Section) */}
+        <div className="flex flex-col h-screen sm:h-full items-center sm:justify-center sm:p-6 md:bg-white">
+          <div className="w-full max-w-sm bg-[#F4F8FD] sm:bg-transparent md:space-y-12">
+            <div className="sm:text-center flex flex-col sm:items-center text-black-100 gap-6 p-4 sm:p-0">
+              {/* Logo */}
+              <div
+                onClick={handleClick}
+                className="flex items-center space-x-2 w-max cursor-pointer"
               >
-                <CheckCircle /> <p>Need Assessment</p>
-              </button>
-              <button
-                className={`flex-1 p-2 text-center text-sm flex items-center justify-center gap-3 font-medium ${
-                  activeTab === "CV Upload"
-                    ? "border-b-2 border-[#9CB3D7] text-[#36A1C5] md:bg-[#F7FBFD]"
-                    : "text-gray-500"
-                }`}
-                onClick={() => handleTabClick("CV Upload")}
-              >
-                <CheckCircle size={20} /> <p>CV Upload</p>
-              </button>
+                <Logo2 width={35} height={35} />
+                <span className="text-base md:text-xl mt-2 font-bold">
+                  GetreKruitd
+                </span>
+              </div>
             </div>
-            {activeTab === "Need Assessment" ? (
-              <NeedAssessment onProceed={handleProceedFromAssessment} />
-            ) : (
-              <CVUpload
-                onBack={() => setActiveTab("Need Assessment")}
-                onProceed={handleCVUploadProceed}
-                loading={loading}
-              />
-            )}
+            <div className="rounded-t-[40px] sm:rounded-t-none p-4 sm:p-0 mt-3 sm:mt-0 bg-white">
+              {/* Tabs */}
+              <div className="flex border-b mb-4 w-full">
+                <button
+                  className={`flex-1 p-2 text-center text-sm flex items-center justify-center gap-3 font-medium ${
+                    activeTab === "Need Assessment"
+                      ? "border-b-2 border-[#9CB3D7] text-[#36A1C5] md:bg-[#F7FBFD]"
+                      : "text-gray-500"
+                  }`}
+                  onClick={() => setActiveTab("Need Assessment")}
+                >
+                  <CheckCircle /> <p>Need Assessment</p>
+                </button>
+                <button
+                  className={`flex-1 p-2 text-center text-sm flex items-center justify-center gap-3 font-medium ${
+                    activeTab === "CV Upload"
+                      ? "border-b-2 border-[#9CB3D7] text-[#36A1C5] md:bg-[#F7FBFD]"
+                      : "text-gray-500"
+                  }`}
+                  onClick={() => handleTabClick("CV Upload")}
+                >
+                  <CheckCircle size={20} /> <p>CV Upload</p>
+                </button>
+              </div>
+              {activeTab === "Need Assessment" ? (
+                <NeedAssessment onProceed={handleProceedFromAssessment} />
+              ) : (
+                <CVUpload
+                  onBack={() => setActiveTab("Need Assessment")}
+                  onProceed={handleCVUploadProceed}
+                  loading={loading}
+                />
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </div>
     </>
   );
 };
