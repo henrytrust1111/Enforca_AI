@@ -3,8 +3,7 @@ import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import ProgressBarProvider from "@/components/ProgressBarProvider";
 import sharpsans from "./fonts/sharpsan";
-
-
+import { AppWrapper } from "@/context";
 
 export const metadata: Metadata = {
   title: "Enforcal AI",
@@ -19,7 +18,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`custom-scrollbar ${sharpsans.variable}`}>
       <body className="w-full max-w-full font-sharpsans">
-        <ProgressBarProvider>{children}</ProgressBarProvider>
+        <AppWrapper>
+          <ProgressBarProvider>{children}</ProgressBarProvider>
+        </AppWrapper>
         <Toaster position="top-right" />
       </body>
     </html>

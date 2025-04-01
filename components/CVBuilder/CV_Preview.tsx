@@ -54,7 +54,7 @@ const CV_Preview: React.FC = () => {
       </div>
 
       <div ref={cvRef}>
-        {currentTemplate === "template1" ? <CV_Template1 /> : <CV_Template3 />}
+        {currentTemplate === "template1" ? <CV_Template3 /> : <CV_Template1 />}
       </div>
     </div>
   );
