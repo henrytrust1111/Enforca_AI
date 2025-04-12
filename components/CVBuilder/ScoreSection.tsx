@@ -83,21 +83,52 @@ const ScoreSection = () => {
   const [resumeScores, setResumeScores] = useState<number>(0);
   const [relevantScores, setRelevantScores] = useState<number>(0);
 
+  // useEffect(() => {
+  //   const cvData = JSON.parse(localStorage.getItem("cvData") || "{}");
+  //   const scores = cvData?.data?.analysisResult?.resumeScores || {};
+
+  //   // Remove percentage sign and convert to number
+  //   const overallResumeScore = parseInt(scores.overallResumeScore.replace('%', ''), 10) || 0;
+  //   const relevancyScore = parseInt(scores.relevancyScore.replace('%', ''), 10) || 0;
+
+  //   console.log({ overallResumeScore, relevancyScore });
+  //   // console.log(cvData);
+    
+
+  //   setResumeScores(overallResumeScore);
+  //   setRelevantScores(relevancyScore);
+
+  //   // Set initial score values based on the active tab
+  //   if (activeScoreTab === "relevancy") {
+  //     setScoreValue(relevancyScore);
+  //     setScoreText(getScoreText(relevancyScore, "relevantScores"));
+  //   } else {
+  //     setScoreValue(overallResumeScore);
+  //     setScoreText(getScoreText(overallResumeScore, "resumeScores"));
+  //   }
+  // }, [activeScoreTab]);
+
+
   useEffect(() => {
     const cvData = JSON.parse(localStorage.getItem("cvData") || "{}");
     const scores = cvData?.data?.analysisResult?.resumeScores || {};
-
-    // Remove percentage sign and convert to number
-    const overallResumeScore = parseInt(scores.overallResumeScore.replace('%', ''), 10) || 0;
-    const relevancyScore = parseInt(scores.relevancyScore.replace('%', ''), 10) || 0;
-
+  
+    // Safely handle undefined or non-string values
+    const overallResumeScore = parseInt(
+      (scores.overallResumeScore || "0").toString().replace('%', ''), 
+      10
+    ) || 0;
+  
+    const relevancyScore = parseInt(
+      (scores.relevancyScore || "0").toString().replace('%', ''), 
+      10
+    ) || 0;
+  
     console.log({ overallResumeScore, relevancyScore });
-    // console.log(cvData);
-    
-
+  
     setResumeScores(overallResumeScore);
     setRelevantScores(relevancyScore);
-
+  
     // Set initial score values based on the active tab
     if (activeScoreTab === "relevancy") {
       setScoreValue(relevancyScore);
@@ -106,7 +137,7 @@ const ScoreSection = () => {
       setScoreValue(overallResumeScore);
       setScoreText(getScoreText(overallResumeScore, "resumeScores"));
     }
-  }, [activeScoreTab]);
+  }, [activeScoreTab]); 
 
   // Toggle Relevancy vs Overall Score
   const handleScoreTabClick = (tab: "relevancy" | "overall") => {

@@ -73,7 +73,7 @@ const CV_Template1: React.FC = () => {
               <p className="text-sm text-gray-600">GRUPP INC</p>
             </div>
             <div className="text-sm text-gray-600 text-right">
-              <p>Aug '24 - Present</p>
+              <p>Aug &apos;24 - Present</p>
               <p>Lagos, NG</p>
             </div>
           </div>
@@ -92,7 +92,7 @@ const CV_Template1: React.FC = () => {
               <p className="text-sm text-gray-600">MIKRO SOFTWARE SOLUTIONS</p>
             </div>
             <div className="text-sm text-gray-600 text-right">
-              <p>May '21 - Feb '23</p>
+              <p>May &apos;21 - Feb &apos;23</p>
               <p>South-West Nigeria</p>
             </div>
           </div>
@@ -134,7 +134,7 @@ const CV_Template1: React.FC = () => {
             <p className="text-sm text-gray-600">Lagos State University</p>
           </div>
           <div className="text-sm text-gray-600 text-right">
-            <p>Sep '20 - Apr '21</p>
+            <p>Sep &apos;20 - Apr &apos;21</p>
             <p>Lagos, Nigeria</p>
           </div>
         </div>

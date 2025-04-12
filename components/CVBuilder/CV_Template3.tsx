@@ -10,10 +10,19 @@ type SectionState = {
 };
 
 const CV_Template3: React.FC = () => {
-  const { autoFixVersion } = useMyContext();
-  const [originalData, setOriginalData] = useState<any>({});
-  const [correctedData, setCorrectedData] = useState<any>({});
-  const [sectionChoices, setSectionChoices] = useState<SectionState>({});
+  // const {  } = useMyContext();
+  const { 
+    autoFixVersion,
+    sectionChoices,
+    setSectionChoices,
+    originalData,
+    correctedData,
+    setOriginalData,
+    setCorrectedData
+  } = useMyContext();
+  // const [originalData, setOriginalData] = useState<any>({});
+  // const [correctedData, setCorrectedData] = useState<any>({});
+  // const [sectionChoices, setSectionChoices] = useState<SectionState>({});
 
   useEffect(() => {
     const cvData = JSON.parse(localStorage.getItem("cvData") || "{}");
@@ -21,13 +30,19 @@ const CV_Template3: React.FC = () => {
     setCorrectedData(cvData?.data?.analysisResult?.correctedResumeData || {});
   }, []);
 
+  // useEffect(() => {
+  //   const cvData = JSON.parse(localStorage.getItem("cvData") || "{}");
+  //   setOriginalData(cvData?.data?.resumeData || {});
+  //   setCorrectedData(cvData?.data?.analysisResult?.correctedResumeData || {});
+  // }, [])
+
   useEffect(() => {
     if (autoFixVersion > 0) {
       const initialSectionChoices: SectionState = {};
 
       // Apply corrections to all sections
-      Object.keys(correctedData).forEach(section => {
-        if (section === 'experience') {
+      Object.keys(correctedData).forEach((section) => {
+        if (section === "experience") {
           correctedData.experience?.forEach((_: any, index: number) => {
             initialSectionChoices[`experience-${index}`] = "corrected";
           });
@@ -41,13 +56,17 @@ const CV_Template3: React.FC = () => {
   }, [autoFixVersion, correctedData]);
 
   const handleSectionChoice = (section: string, useCorrected: boolean) => {
-    setSectionChoices(prev => ({
+    setSectionChoices((prev) => ({
       ...prev,
       [section]: useCorrected ? "corrected" : "original"
     }));
   };
 
-  const renderSectionContent = (section: string, original: any, corrected: any) => {
+  const renderSectionContent = (
+    section: string,
+    original: any,
+    corrected: any
+  ) => {
     const choice = sectionChoices[section];
     const showOriginal = choice ? choice === "original" : !corrected;
 
@@ -91,18 +110,28 @@ const CV_Template3: React.FC = () => {
         <div className="mb-6">
           <div className="flex justify-between items-start mb-2">
             <div>
-              <h3 className="font-bold">{showOriginal ? exp.title : correctedExp?.title}</h3>
-              <p className="text-gray-600">{showOriginal ? exp.location : correctedExp?.location}</p>
+              <h3 className="font-bold">
+                {showOriginal ? exp.title : correctedExp?.title}
+              </h3>
+              <p className="text-gray-600">
+                {showOriginal ? exp.location : correctedExp?.location}
+              </p>
             </div>
             <div className="text-right">
-              <p className="font-medium">{showOriginal ? exp.duration : correctedExp?.duration}</p>
-              <p className="text-gray-600">{showOriginal ? exp.location : correctedExp?.location}</p>
+              <p className="font-medium">
+                {showOriginal ? exp.duration : correctedExp?.duration}
+              </p>
+              <p className="text-gray-600">
+                {showOriginal ? exp.location : correctedExp?.location}
+              </p>
             </div>
           </div>
           <ul className="list-disc pl-5 space-y-2">
-            {(showOriginal ? exp.details : correctedExp?.details)?.map((detail: string, i: number) => (
-              <li key={i}>{detail}</li>
-            ))}
+            {(showOriginal ? exp.details : correctedExp?.details)?.map(
+              (detail: string, i: number) => (
+                <li key={i}>{detail}</li>
+              )
+            )}
           </ul>
         </div>
       );
@@ -174,14 +203,18 @@ const CV_Template3: React.FC = () => {
     const choice = sectionChoices[sectionKey];
     const originalSkills = originalData.skills?.split(",") || [];
     const correctedSkills = correctedData.skills?.split(",") || [];
-    const showOriginal = choice ? choice === "original" : !correctedSkills.length;
+    const showOriginal = choice
+      ? choice === "original"
+      : !correctedSkills.length;
 
     if (choice) {
       return (
         <div className="grid grid-cols-2 gap-4">
-          {(showOriginal ? originalSkills : correctedSkills).map((skill: string, i: number) => (
-            <span key={i}>{skill.trim()}</span>
-          ))}
+          {(showOriginal ? originalSkills : correctedSkills).map(
+            (skill: string, i: number) => (
+              <span key={i}>{skill.trim()}</span>
+            )
+          )}
         </div>
       );
     }
@@ -225,7 +258,11 @@ const CV_Template3: React.FC = () => {
       <header className="bg-black py-11 px-6 text-white flex flex-col md:!flex-row-reverse md:items-center justify-between items-start gap-4">
         <div className="text-right space-y-2">
           <h1 className="text-2xl font-semibold uppercase">
-            {renderSectionContent("name", originalData.name, correctedData.name)}
+            {renderSectionContent(
+              "name",
+              originalData.name,
+              correctedData.name
+            )}
           </h1>
         </div>
 
@@ -242,23 +279,31 @@ const CV_Template3: React.FC = () => {
       </header>
 
       <Section title="PROFESSIONAL SUMMARY">
-        <p className="text-justify leading-relaxed">
-          {renderSectionContent("summary", originalData.summary, correctedData.summary)}
-        </p>
+        <div className="text-justify leading-relaxed">
+          {renderSectionContent(
+            "summary",
+            originalData.summary,
+            correctedData.summary
+          )}
+        </div>
       </Section>
 
-      <Section title="TECHNICAL SKILLS">
-        {renderSkills()}
-      </Section>
+      <Section title="TECHNICAL SKILLS">{renderSkills()}</Section>
 
       <Section title="EXPERIENCE">
-        {originalData.experience?.map((exp: any, i: number) =>
-          renderExperience(exp, correctedData.experience?.[i], i)
-        )}
+        {originalData.experience?.map((exp: any, i: number) => (
+          <React.Fragment key={i}>
+            {renderExperience(exp, correctedData.experience?.[i], i)}
+          </React.Fragment>
+        ))}
       </Section>
 
       <Section title="EDUCATION">
-        {renderSectionContent("education", originalData.education, correctedData.education)}
+        {renderSectionContent(
+          "education",
+          originalData.education,
+          correctedData.education
+        )}
       </Section>
     </div>
   );
@@ -277,19 +322,6 @@ const Section: React.FC<{ title: string; children: React.ReactNode }> = ({
 );
 
 export default CV_Template3;
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -330,7 +362,7 @@ export default CV_Template3;
 
 //   const renderContent = (section: string, original: any, corrected: any) => {
 //     if (replacedSections[section]) return <span>{corrected}</span>;
-    
+
 //     return (
 //       <div className="relative group">
 //         <span className="text-red-500">{original}</span>
@@ -351,7 +383,7 @@ export default CV_Template3;
 
 //   const renderExperience = (exp: any, correctedExp: any, index: number) => {
 //     const sectionKey = `experience-${index}`;
-    
+
 //     if (replacedSections[sectionKey]) {
 //       return (
 //         <div className="mb-6" key={index}>
@@ -391,7 +423,7 @@ export default CV_Template3;
 //             <li key={i}>{detail}</li>
 //           ))}
 //         </ul>
-        
+
 //         {correctedExp && (
 //           <div className="mt-4 p-4 bg-green-50 rounded relative">
 //             <button
@@ -511,50 +543,6 @@ export default CV_Template3;
 // );
 
 // export default CV_Template3;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // "use client";
 

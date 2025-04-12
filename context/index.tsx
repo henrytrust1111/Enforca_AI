@@ -1,26 +1,37 @@
 "use client";
 
-import React, { useState, useContext, createContext } from "react";
+import React, { useState, useContext, createContext, Dispatch, SetStateAction } from "react";
 
-// Define the type for the context value
+type SectionState = {
+  [key: string]: "original" | "corrected";
+};
+
 interface MyContextType {
   isOpen: boolean;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
   autoFixVersion: number;
   triggerAutoFix: () => void;
   isLoading: boolean;
+  sectionChoices: SectionState;
+  originalData: any;
+  correctedData: any;
+  setSectionChoices: Dispatch<SetStateAction<SectionState>>;
+  setOriginalData: Dispatch<SetStateAction<any>>;
+  setCorrectedData: Dispatch<SetStateAction<any>>;
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
 }
 
-// Create the context with a default value of `null`
 const MyContext = createContext<MyContextType | null>(null);
 
-// Context Provider Component
 export const AppWrapper: React.FC<{ children: React.ReactNode }> = ({
   children
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [autoFixVersion, setAutoFixVersion] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [sectionChoices, setSectionChoices] = useState<SectionState>({});
+  const [originalData, setOriginalData] = useState<any>({});
+  const [correctedData, setCorrectedData] = useState<any>({});
 
   const triggerAutoFix = async () => {
     setIsLoading(true);
@@ -31,18 +42,23 @@ export const AppWrapper: React.FC<{ children: React.ReactNode }> = ({
     setAutoFixVersion(prev => prev + 1);
     setIsLoading(false);
     localStorage.removeItem("autoFixAll");
-  } 
-  
-
+  };
 
   return (
     <MyContext.Provider
-       value={{
+      value={{
         isOpen,
         setIsOpen,
         autoFixVersion,
         triggerAutoFix,
-        isLoading
+        isLoading,
+        sectionChoices,
+        originalData,
+        correctedData,
+        setSectionChoices,
+        setOriginalData,
+        setCorrectedData,
+        setIsLoading
       }}
     >
       {children}
@@ -50,7 +66,6 @@ export const AppWrapper: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
-// Custom hook for consuming the context
 export function useMyContext(): MyContextType {
   const context = useContext(MyContext);
   if (!context) {
