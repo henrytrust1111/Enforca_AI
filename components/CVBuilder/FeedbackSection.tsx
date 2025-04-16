@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { HiOutlineBan } from "react-icons/hi";
-import { ArrowRight } from "../icons/Icons";
+// import { ArrowRight } from "../icons/Icons";
 import { BiSolidLock } from "react-icons/bi";
 import { FaCheck } from "react-icons/fa6";
 import { useMyContext } from "@/context";
@@ -33,7 +33,7 @@ const categoryDescriptions = {
 const FeedbackSection: React.FC<FeedbackSectionProps> = ({
   activeCategory,
   onCategoryChange,
-  showFixModal
+  // showFixModal
 }) => {
   const { analysisResult, setAnalysisResult } = useMyContext();
   const [feedbackItems, setFeedbackItems] = useState<FeedbackItem[]>([]);
@@ -226,7 +226,7 @@ const FeedbackSection: React.FC<FeedbackSectionProps> = ({
               <h4 className="font-semibold text-sm">{item.title}</h4>
               <p className="text-xs text-gray-600">{item.description}</p>
             </div>
-            {item.marker === "needFix" && (
+            {/* {item.marker === "needFix" && (
               <button
                 className="ml-4 p-2 flex items-center space-x-1 text-[#036DF5] gap-1 text-sm border border-[#036DF5] rounded-[10px]  transition-colors"
                 onClick={showFixModal}
@@ -234,7 +234,7 @@ const FeedbackSection: React.FC<FeedbackSectionProps> = ({
                 <span>Fix</span>
                 <ArrowRight width={20} height={20} />
               </button>
-            )}
+            )} */}
           </div>
         ))}
       </div>
