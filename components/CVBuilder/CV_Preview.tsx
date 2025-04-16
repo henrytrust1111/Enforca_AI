@@ -12,7 +12,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { useMyContext } from "@/context";
 
 const CV_Preview: React.FC = () => {
-  const { sectionChoices, originalData, correctedData } = useMyContext();
+  const { sectionChoices, correctedData } = useMyContext();
   const [currentTemplate, setCurrentTemplate] = useState<"template1" | "template2">("template1");
   const { setIsLoading } = useMyContext();
   const cvRef = useRef<HTMLDivElement>(null);
